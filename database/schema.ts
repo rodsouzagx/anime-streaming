@@ -7,8 +7,101 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class AnimeGenreSchema extends BaseModel {
+  static $columns = ['animeId', 'genreId'] as const
+  $columns = AnimeGenreSchema.$columns
+  @column()
+  declare animeId: number
+  @column()
+  declare genreId: number
+}
+
+export class AnimeSchema extends BaseModel {
+  static $columns = ['ageRating', 'bannerPath', 'coverPath', 'createdAt', 'id', 'releaseYear', 'slug', 'status', 'studio', 'synopsis', 'title', 'updatedAt'] as const
+  $columns = AnimeSchema.$columns
+  @column()
+  declare ageRating: string | null
+  @column()
+  declare bannerPath: string | null
+  @column()
+  declare coverPath: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare releaseYear: number | null
+  @column()
+  declare slug: string
+  @column()
+  declare status: string
+  @column()
+  declare studio: string | null
+  @column()
+  declare synopsis: string
+  @column()
+  declare title: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class EpisodeSchema extends BaseModel {
+  static $columns = ['createdAt', 'durationSeconds', 'id', 'number', 'seasonId', 'synopsis', 'title', 'updatedAt', 'videoPath'] as const
+  $columns = EpisodeSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column()
+  declare durationSeconds: number | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare number: number
+  @column()
+  declare seasonId: number
+  @column()
+  declare synopsis: string | null
+  @column()
+  declare title: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare videoPath: string
+}
+
+export class GenreSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'name', 'slug', 'updatedAt'] as const
+  $columns = GenreSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare name: string
+  @column()
+  declare slug: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class SeasonSchema extends BaseModel {
+  static $columns = ['animeId', 'createdAt', 'id', 'number', 'title', 'updatedAt'] as const
+  $columns = SeasonSchema.$columns
+  @column()
+  declare animeId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare number: number
+  @column()
+  declare title: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
+  static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'role', 'updatedAt'] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -20,6 +113,8 @@ export class UserSchema extends BaseModel {
   declare id: number
   @column({ serializeAs: null })
   declare password: string
+  @column()
+  declare role: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
