@@ -1,11 +1,42 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import app from '@adonisjs/core/services/app'
+import { randomUUID } from 'node:crypto'
+import string from '@adonisjs/core/helpers/string'
 import Anime from '#models/anime'
+import { createAnimeValidator } from '#validators/anime'
 
 export default class AdminAnimesController {
   async index({ view }: HttpContext) {
     const animes = await Anime.query().orderBy('created_at', 'desc')
 
     return view.render('pages/admin/animes/index', { animes })
+  }
+
+  async create({ view }: HttpContext) {
+    return view.render('pages/admin/animes/create')
+  }
+
+  async store({ request, response }: HttpContext) {
+    const { cover, banner, ...data } = await request.validateUsing(createAnimeValidator)
+
+    const coverName = `${randomUUID()}.${cover.extname}`
+    await cover.move(app.makePath('public/uploads/covers'), { name: coverName })
+
+    let bannerPath: string | null = null
+    if (banner) {
+      const bannerName = `${randomUUID()}.${banner.extname}`
+      await banner.move(app.makePath('public/uploads/banners'), { name: bannerName })
+      bannerPath = `uploads/banners/${bannerName}`
+    }
+
+    await Anime.create({
+      ...data,
+      slug: string.slug(data.title, { lower: true }),
+      coverPath: `uploads/covers/${coverName}`,
+      bannerPath,
+    })
+
+    return response.redirect('/admin/animes')
   }
 
   async destroy({ params, response }: HttpContext) {

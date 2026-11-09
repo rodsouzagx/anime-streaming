@@ -1,7 +1,7 @@
 @layouts.app({ title: 'Animes' })
   @page()
     <h1>Animes</h1>
-
+    <p><a href="/admin/animes/create">+ Cadastrar anime</a></p>
     <table>
       <thead>
         <tr>
@@ -16,7 +16,10 @@
         @each(anime in animes)
           <tr>
             <td>{{ anime.id }}</td>
-            <td>{{ anime.title }}</td>
+            <td>
+              <img src="/{{ anime.coverPath }}" alt="" width="40" />
+              {{ anime.title }}
+            </td>
             <td>{{ anime.status === 'ongoing' ? 'Em lançamento' : 'Finalizado' }}</td>
             <td>{{ anime.createdAt.toFormat('dd/MM/yyyy') }}</td>
             <td>
