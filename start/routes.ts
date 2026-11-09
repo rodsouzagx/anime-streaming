@@ -47,6 +47,17 @@ router
       .post('/animes/:animeId/seasons', [controllers.AdminSeasons, 'store'])
       .as('admin.seasons.store')
     router.delete('/seasons/:id', [controllers.AdminSeasons, 'destroy']).as('admin.seasons.destroy')
+
+    // Episódios
+    router
+      .get('/seasons/:seasonId/episodes/create', [controllers.AdminEpisodes, 'create'])
+      .as('admin.episodes.create')
+    router
+      .post('/seasons/:seasonId/episodes', [controllers.AdminEpisodes, 'store'])
+      .as('admin.episodes.store')
+    router
+      .delete('/episodes/:id', [controllers.AdminEpisodes, 'destroy'])
+      .as('admin.episodes.destroy')
   })
   .prefix('/admin')
   .use([middleware.auth(), middleware.admin()])

@@ -1,0 +1,58 @@
+@layouts.app({ title: 'Adicionar episódio' })
+  @page()
+    <p><a href="/admin/animes/{{ season.animeId }}">← Voltar para {{ season.anime.title }}</a></p>
+
+    <h1>{{ season.anime.title }}: Temporada {{ season.number }}</h1>
+    <h2>Adicionar episódio</h2>
+
+    <form
+      method="POST"
+      action="/admin/seasons/{{ season.id }}/episodes"
+      enctype="multipart/form-data"
+    >
+      {{ csrfField() }}
+      <p>
+        <label>Número *</label>
+        <br />
+        <input type="number" name="number" min="1" value="{{ season.episodes.length + 1 }}" />
+        @inputError('number')
+          @each(message in $messages)
+            <br />
+            <small>{{ message }}</small>
+          @end
+        @end
+      </p>
+
+      <p>
+        <label>Título *</label>
+        <br />
+        <input type="text" name="title" value="{{ old('title') || '' }}" />
+        @inputError('title')
+          @each(message in $messages)
+            <br />
+            <small>{{ message }}</small>
+          @end
+        @end
+      </p>
+
+      <p>
+        <label>Sinopse (opcional)</label>
+        <br />
+        <textarea name="synopsis" rows="4">{{ old('synopsis') || '' }}</textarea>
+      </p>
+
+      <p>
+        <label>Vídeo * (mp4 ou webm, até 500 MB)</label>
+        <br />
+        <input type="file" name="video" accept="video/mp4,video/webm" />
+        @inputError('video')
+          @each(message in $messages)
+            <br />
+            <small>{{ message }}</small>
+          @end
+        @end
+      </p>
+      <button type="submit">Adicionar episódio</button>
+    </form>
+  @end
+@end

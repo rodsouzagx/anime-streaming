@@ -12,7 +12,22 @@
 
         <ul>
           @each(episode in season.episodes)
-            <li>Episódio {{ episode.number }}: {{ episode.title }}</li>
+            <li>
+              
+              Episódio
+              {{ episode.number }}
+              :
+              {{ episode.title }}
+              <form
+                method="POST"
+                action="/admin/episodes/{{ episode.id }}?_method=DELETE"
+                style="display: inline;"
+                onsubmit="return confirm('Remover este episódio?')"
+              >
+                {{ csrfField() }}
+                <button type="submit">Remover</button>
+              </form>
+            </li>
           @end
         </ul>
 
