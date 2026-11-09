@@ -5,6 +5,7 @@
 @let(placeholder = $props.get('placeholder') ?? '')
 @let(hint = $props.get('hint'))
 @let(required = $props.get('required'))
+@let(accept = $props.get('accept'))
 
 <div class="flex flex-col gap-1.5">
   @if(label)
@@ -16,13 +17,18 @@
     </label>
   @end
 
-  <input
+    <input
     id="{{ name }}"
     name="{{ name }}"
     type="{{ type }}"
-    value="{{ value }}"
+    @if(type !== 'file')
+      value="{{ value }}"
+    @end
     placeholder="{{ placeholder }}"
-    class="h-10 w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground transition-colors duration-150 ease-smooth placeholder:text-muted hover:border-muted/40 focus:border-accent focus:ring-2 focus:ring-accent/25 focus:outline-none"
+    @if(accept)
+      accept="{{ accept }}"
+    @end
+    class="w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground transition-colors duration-150 ease-smooth placeholder:text-muted hover:border-muted/40 focus:border-accent focus:ring-2 focus:ring-accent/25 focus:outline-none {{ type === 'file' ? 'py-2 file:mr-3 file:rounded file:border-0 file:bg-surface-2 file:px-3 file:py-1 file:text-sm file:font-medium file:text-foreground' : 'h-10' }}"
   />
   @if(hint)
     <p class="type-meta">{{ hint }}</p>
