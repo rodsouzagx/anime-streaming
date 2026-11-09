@@ -1,0 +1,22 @@
+@layouts.app({ title: anime.title + ' - Episódio ' + episode.number })
+  @page()
+    <p><a href="/animes/{{ anime.slug }}">← Voltar para {{ anime.title }}</a></p>
+
+    <video
+      src="/{{ episode.videoPath }}"
+      controls
+      style="width: 100%; max-height: 70vh; background: black;"
+    ></video>
+
+    <h1>{{ anime.title }}</h1>
+    <h2>
+      Temporada
+      {{ episode.season.number }}, Episódio
+      {{ episode.number }}:
+      {{ episode.title }}
+    </h2>
+    @if(episode.synopsis)
+      <p>{{ episode.synopsis }}</p>
+    @end
+  @end
+@end

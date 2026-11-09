@@ -1,0 +1,60 @@
+@layouts.app({ title: anime.title })
+  @page()
+    <p><a href="/animes">← Voltar ao catálogo</a></p>
+    @if(anime.bannerPath)
+      <img
+        src="/{{ anime.bannerPath }}"
+        alt=""
+        style="width: 100%; max-height: 300px; object-fit: cover;"
+      />
+    @end
+
+    <div style="display: flex; gap: 24px; margin-top: 16px;">
+      <img src="/{{ anime.coverPath }}" alt="{{ anime.title }}" width="200" />
+
+      <div>
+        <h1>{{ anime.title }}</h1>
+
+        <p>
+          {{ anime.status === 'ongoing' ? 'Em lançamento' : 'Finalizado' }}
+          @if(anime.releaseYear)
+            ·
+            {{ anime.releaseYear }}
+          @end
+          @if(anime.studio)
+            ·
+            {{ anime.studio }}
+          @end
+          @if(anime.ageRating)
+            ·
+            {{ anime.ageRating === 'L' ? 'Livre' : anime.ageRating + ' anos' }}
+          @end
+        </p>
+        @if(anime.genres.length)
+          <p>Gêneros: {{ anime.genres.map((genre) => genre.name).join(', ') }}</p>
+        @end
+
+        <p>{{ anime.synopsis }}</p>
+      </div>
+    </div>
+
+    <h2>Episódios</h2>
+    @if(anime.seasons.length === 0)
+      <p>Nenhum episódio disponível ainda.</p>
+    @end
+    @each(season in anime.seasons)
+      <h3>Temporada {{ season.number }}{{ season.title ? ': ' + season.title : '' }}</h3>
+      <ul>
+        @each(episode in season.episodes)
+          <li>
+            <a href="/animes/{{ anime.slug }}/episodes/{{ episode.id }}">
+              Episódio
+              {{ episode.number }}:
+              {{ episode.title }}
+            </a>
+          </li>
+        @end
+      </ul>
+    @end
+  @end
+@end

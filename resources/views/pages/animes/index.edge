@@ -1,0 +1,29 @@
+@layouts.app({ title: 'Catálogo' })
+  @page()
+    <h1>Catálogo</h1>
+
+    <form method="GET" action="/animes">
+      <input type="search" name="q" value="{{ search }}" placeholder="Buscar anime pelo nome..." />
+      <button type="submit">Buscar</button>
+    </form>
+    @if(search)
+      <p>
+        {{ animes.length }}
+        resultado(s) para "{{ search }}".
+        <a href="/animes">Limpar busca</a>
+      </p>
+    @end
+    @if(animes.length === 0)
+      <p>Nenhum anime encontrado.</p>
+    @end
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+      @each(anime in animes)
+        <a href="/animes/{{ anime.slug }}" style="width: 150px;">
+          <img src="/{{ anime.coverPath }}" alt="{{ anime.title }}" width="150" />
+          <p>{{ anime.title }}</p>
+        </a>
+      @end
+    </div>
+  @end
+@end
