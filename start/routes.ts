@@ -13,6 +13,10 @@ import router from '@adonisjs/core/services/router'
 
 router.on('/').render('pages/home').as('home')
 
+// Catálogo público
+router.get('/animes', [controllers.Animes, 'index']).as('animes.index')
+router.get('/animes/:slug', [controllers.Animes, 'show']).as('animes.show')
+
 router
   .group(() => {
     router.get('signup', [controllers.NewAccount, 'create'])
