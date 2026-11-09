@@ -1,0 +1,35 @@
+@let(name = $props.get('name'))
+@let(label = $props.get('label'))
+@let(type = $props.get('type') ?? 'text')
+@let(value = $props.get('value') ?? old(name) ?? '')
+@let(placeholder = $props.get('placeholder') ?? '')
+@let(hint = $props.get('hint'))
+@let(required = $props.get('required'))
+
+<div class="flex flex-col gap-1.5">
+  @if(label)
+    <label for="{{ name }}" class="text-sm font-medium text-foreground">
+      {{ label }}
+      @if(required)
+        <span class="text-accent">*</span>
+      @end
+    </label>
+  @end
+
+  <input
+    id="{{ name }}"
+    name="{{ name }}"
+    type="{{ type }}"
+    value="{{ value }}"
+    placeholder="{{ placeholder }}"
+    class="h-10 w-full rounded-md border border-border bg-surface px-3 text-sm text-foreground transition-colors duration-150 ease-smooth placeholder:text-muted hover:border-muted/40 focus:border-accent focus:ring-2 focus:ring-accent/25 focus:outline-none"
+  />
+  @if(hint)
+    <p class="type-meta">{{ hint }}</p>
+  @end
+  @inputError(name)
+    @each(message in $messages)
+      <p class="text-sm text-red-400">{{ message }}</p>
+    @end
+  @end
+</div>
