@@ -1,0 +1,99 @@
+@layouts.app({ title: 'Cadastrar anime' })
+  @page()
+    <h1>Cadastrar anime</h1>
+
+    <form method="POST" action="/admin/animes" enctype="multipart/form-data">
+      {{ csrfField() }}
+      <p>
+        <label>Título *</label>
+        <br />
+        <input type="text" name="title" value="{{ old('title') || '' }}" />
+        @inputError('title')
+          @each(message in $messages)
+            <br />
+            <small>{{ message }}</small>
+          @end
+        @end
+      </p>
+
+      <p>
+        <label>Sinopse *</label>
+        <br />
+        <textarea name="synopsis" rows="5">{{ old('synopsis') || '' }}</textarea>
+        @inputError('synopsis')
+          @each(message in $messages)
+            <br />
+            <small>{{ message }}</small>
+          @end
+        @end
+      </p>
+
+      <p>
+        <label>Status *</label>
+        <br />
+        <select name="status">
+          <option value="ongoing">Em lançamento</option>
+          <option value="finished">Finalizado</option>
+        </select>
+      </p>
+
+      <p>
+        <label>Ano de lançamento</label>
+        <br />
+        <input type="number" name="releaseYear" value="{{ old('releaseYear') || '' }}" />
+        @inputError('releaseYear')
+          @each(message in $messages)
+            <br />
+            <small>{{ message }}</small>
+          @end
+        @end
+      </p>
+
+      <p>
+        <label>Estúdio</label>
+        <br />
+        <input type="text" name="studio" value="{{ old('studio') || '' }}" />
+      </p>
+
+      <p>
+        <label>Classificação indicativa</label>
+        <br />
+        <select name="ageRating">
+          <option value="">Não informada</option>
+          <option value="L">Livre</option>
+          <option value="10">10 anos</option>
+          <option value="12">12 anos</option>
+          <option value="14">14 anos</option>
+          <option value="16">16 anos</option>
+          <option value="18">18 anos</option>
+        </select>
+      </p>
+
+      <p>
+        <label>Capa * (jpg, png ou webp, até 5 MB)</label>
+        <br />
+        <input type="file" name="cover" accept="image/*" />
+        @inputError('cover')
+          @each(message in $messages)
+            <br />
+            <small>{{ message }}</small>
+          @end
+        @end
+      </p>
+
+      <p>
+        <label>Banner (opcional)</label>
+        <br />
+        <input type="file" name="banner" accept="image/*" />
+        @inputError('banner')
+          @each(message in $messages)
+            <br />
+            <small>{{ message }}</small>
+          @end
+        @end
+      </p>
+
+      <button type="submit">Cadastrar</button>
+    </form>
+  @end
+@end
