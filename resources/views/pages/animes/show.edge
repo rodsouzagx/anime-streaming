@@ -1,9 +1,15 @@
 @let(firstEpisode = anime.seasons.find((season) => season.episodes.length)?.episodes[0])
 @layouts.app({ title: anime.title })
   {{-- Banner --}}
-  <section class="relative h-56 overflow-hidden bg-surface sm:h-80">
+  <section
+    class="relative aspect-video max-h-[60vh] w-full overflow-hidden bg-surface sm:aspect-21/9"
+  >
     @if(anime.bannerPath)
-      <img src="/{{ anime.bannerPath }}" alt="" class="size-full object-cover" />
+      <img
+        src="/{{ anime.bannerPath }}"
+        alt=""
+        class="size-full object-cover object-[center_30%]"
+      />
     @else
       <img
         src="/{{ anime.coverPath }}"
