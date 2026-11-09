@@ -1,0 +1,28 @@
+@layouts.app({ title: 'Usuários' })
+  @page()
+    <h1>Usuários</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>E-mail</th>
+          <th>Papel</th>
+          <th>Cadastrado em</th>
+        </tr>
+      </thead>
+      <tbody>
+        @each(user in users)
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.fullName ?? '—' }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role }}</td>
+            <td>{{ user.createdAt.toFormat('dd/MM/yyyy') }}</td>
+          </tr>
+        @end
+      </tbody>
+    </table>
+  @end
+@end

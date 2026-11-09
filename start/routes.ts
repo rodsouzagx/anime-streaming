@@ -33,6 +33,7 @@ router
 router
   .group(() => {
     router.on('/').render('pages/admin/dashboard').as('admin.dashboard')
+    router.get('/users', [controllers.AdminUsers, 'index']).as('admin.users.index')
   })
   .prefix('/admin')
   .use([middleware.auth(), middleware.admin()])
