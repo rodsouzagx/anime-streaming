@@ -3,12 +3,9 @@
     <h1 class="type-h1 motion-safe:animate-fade-up">Catálogo</h1>
     <form method="GET" action="/animes">
       <input type="search" name="q" value="{{ search }}" placeholder="Buscar anime pelo nome..." />
-      <button
-        type="submit"
-        class="rounded-md bg-accent px-4 py-2 font-semibold text-accent-foreground"
-      >
+      @ui.button({ type: 'submit' })
         Buscar
-      </button>
+      @end
     </form>
     @if(search)
       <p>
@@ -21,12 +18,9 @@
       <p>Nenhum anime encontrado.</p>
     @end
 
-    <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
       @each(anime in animes)
-        <a href="/animes/{{ anime.slug }}" style="width: 150px;">
-          <img src="/{{ anime.coverPath }}" alt="{{ anime.title }}" width="150" />
-          <p>{{ anime.title }}</p>
-        </a>
+        @!ui.animeCard({ anime })
       @end
     </div>
   @end
