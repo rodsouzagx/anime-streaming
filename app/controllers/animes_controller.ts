@@ -1,5 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Anime from '#models/anime'
+import Episode from '#models/episode'
 
 export default class AnimesController {
   async index({ request, view }: HttpContext) {
@@ -26,5 +27,19 @@ export default class AnimesController {
       .firstOrFail()
 
     return view.render('pages/animes/show', { anime })
+  }
+
+  async watch({ params, view }: HttpContext) {
+    const anime = await Anime.findByOrFail('slug', params.slug)
+
+    const episode = await Episode.query()
+      .where('id', params.episodeId)
+      .whereHas('season', (seasonQuery) => {
+        seasonQuery.where('anime_id', anime.id)
+      })
+      .preload('season')
+      .firstOrFail()
+
+    return view.render('pages/animes/watch', { anime, episode })
   }
 }

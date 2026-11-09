@@ -7,6 +7,7 @@ export type ScannedRoutes = {
     'home': { paramsTuple?: []; params?: {} }
     'animes.index': { paramsTuple?: []; params?: {} }
     'animes.show': { paramsTuple: [ParamValue]; params: {'slug': ParamValue} }
+    'animes.watch': { paramsTuple: [ParamValue,ParamValue]; params: {'slug': ParamValue,'episodeId': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
@@ -30,6 +31,7 @@ export type ScannedRoutes = {
     'home': { paramsTuple?: []; params?: {} }
     'animes.index': { paramsTuple?: []; params?: {} }
     'animes.show': { paramsTuple: [ParamValue]; params: {'slug': ParamValue} }
+    'animes.watch': { paramsTuple: [ParamValue,ParamValue]; params: {'slug': ParamValue,'episodeId': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'dashboard': { paramsTuple?: []; params?: {} }
@@ -44,6 +46,7 @@ export type ScannedRoutes = {
     'home': { paramsTuple?: []; params?: {} }
     'animes.index': { paramsTuple?: []; params?: {} }
     'animes.show': { paramsTuple: [ParamValue]; params: {'slug': ParamValue} }
+    'animes.watch': { paramsTuple: [ParamValue,ParamValue]; params: {'slug': ParamValue,'episodeId': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'dashboard': { paramsTuple?: []; params?: {} }
