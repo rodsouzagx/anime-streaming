@@ -1,6 +1,8 @@
 @layouts.app({ title: 'Catálogo' })
   @page()
-    <h1 class="text-3xl font-bold text-foreground">Catálogo</h1>
+    <h1 class="font-display text-5xl font-bold uppercase tracking-wide text-foreground">
+      Catálogo
+    </h1>
 
     <form method="GET" action="/animes">
       <input type="search" name="q" value="{{ search }}" placeholder="Buscar anime pelo nome..." />
