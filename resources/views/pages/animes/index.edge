@@ -1,6 +1,5 @@
 @layouts.app({ title: 'Catálogo' })
-  @page()
-    <h1 class="type-h1 motion-safe:animate-fade-up">Catálogo</h1>
+  @page({ title: 'Catálogo', description: 'Todos os animes disponíveis na plataforma.' })
     <form method="GET" action="/animes">
       <input type="search" name="q" value="{{ search }}" placeholder="Buscar anime pelo nome..." />
       @ui.button({ type: 'submit' })
