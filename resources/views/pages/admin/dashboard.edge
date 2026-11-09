@@ -1,14 +1,39 @@
-@layouts.app({ title: 'Painel administrativo' })
-  @page()
-    <div class="empty">
-      <div class="empty__mark">
-        @svg('lucide:shield', { width: 22, height: 22 })
-      </div>
-      <h1>Painel administrativo</h1>
-      <p>
-        Área restrita a administradores. Aqui você vai gerenciar animes, temporadas, episódios e usuários.
-      </p>
-      <p><a href="/admin/users">Ver usuários</a> <a href="/admin/animes">Ver animes</a></p>
+@let(cards = [
+  {
+    label: 'Animes',
+    value: stats.animes,
+    href: '/admin/animes',
+    icon: 'lucide:clapperboard',
+  },
+  { label: 'Episódios', value: stats.episodes, href: '/admin/episodes', icon: 'lucide:play' },
+  { label: 'Usuários', value: stats.users, href: '/admin/users', icon: 'lucide:users' },
+])
+@layouts.app({ title: 'Painel' })
+  @page({ title: 'Painel', description: 'Visão geral da plataforma.' })
+    @slot('actions')
+      @ui.button({ href: '/admin/animes/create' })
+        @svg('lucide:plus', { width: 16, height: 16 })
+        <span>Cadastrar anime</span>
+      @end
+    @end
+
+    <div class="grid gap-4 sm:grid-cols-3">
+      @each(card in cards)
+        <a
+          href="{{ card.href }}"
+          class="group flex flex-col gap-4 rounded-lg border border-border bg-surface p-5 transition-colors duration-150 hover:border-accent/50"
+        >
+          <div class="flex items-center justify-between">
+            <span class="type-caption">{{ card.label }}</span>
+            @svg(card.icon, {
+              width: 18,
+              height: 18,
+              class: 'text-muted transition-colors group-hover:text-accent',
+            })
+          </div>
+          <span class="font-display text-5xl font-bold">{{ card.value }}</span>
+        </a>
+      @end
     </div>
   @end
 @end

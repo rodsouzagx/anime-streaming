@@ -16,6 +16,16 @@ export default class AdminEpisodesController {
     return view.render('pages/admin/episodes/create', { season })
   }
 
+  async index({ view }: HttpContext) {
+    const episodes = await Episode.query()
+      .preload('season', (seasonQuery) => {
+        seasonQuery.preload('anime')
+      })
+      .orderBy('created_at', 'desc')
+
+    return view.render('pages/admin/episodes/index', { episodes })
+  }
+
   async store({ params, request, response }: HttpContext) {
     const season = await Season.findOrFail(params.seasonId)
     const { video, ...data } = await request.validateUsing(createEpisodeValidator)
@@ -33,10 +43,9 @@ export default class AdminEpisodesController {
 
   async destroy({ params, response }: HttpContext) {
     const episode = await Episode.query().where('id', params.id).preload('season').firstOrFail()
-    const animeId = episode.season.animeId
 
     await episode.delete()
 
-    return response.redirect(`/admin/animes/${animeId}`)
+    return response.redirect().back()
   }
 }
