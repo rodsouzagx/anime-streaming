@@ -12,6 +12,19 @@ export default class AdminAnimesController {
     return view.render('pages/admin/animes/index', { animes })
   }
 
+  async show({ params, view }: HttpContext) {
+    const anime = await Anime.query()
+      .where('id', params.id)
+      .preload('seasons', (seasonsQuery) => {
+        seasonsQuery.orderBy('number').preload('episodes', (episodesQuery) => {
+          episodesQuery.orderBy('number')
+        })
+      })
+      .firstOrFail()
+
+    return view.render('pages/admin/animes/show', { anime })
+  }
+
   async create({ view }: HttpContext) {
     return view.render('pages/admin/animes/create')
   }

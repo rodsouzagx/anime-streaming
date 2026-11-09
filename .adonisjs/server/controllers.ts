@@ -5,6 +5,8 @@
 
 export const controllers = {
   AdminAnimes: () => import('#controllers/admin_animes_controller'),
+  AdminEpisodes: () => import('#controllers/admin_episodes_controller'),
+  AdminSeasons: () => import('#controllers/admin_seasons_controller'),
   AdminUsers: () => import('#controllers/admin_users_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   Session: () => import('#controllers/session_controller'),
