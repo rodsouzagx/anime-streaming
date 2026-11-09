@@ -1,6 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Anime from '#models/anime'
-import Episode from '#models/episode'
 
 export default class AnimesController {
   async index({ request, view }: HttpContext) {
@@ -30,16 +29,26 @@ export default class AnimesController {
   }
 
   async watch({ params, view }: HttpContext) {
-    const anime = await Anime.findByOrFail('slug', params.slug)
-
-    const episode = await Episode.query()
-      .where('id', params.episodeId)
-      .whereHas('season', (seasonQuery) => {
-        seasonQuery.where('anime_id', anime.id)
+    const anime = await Anime.query()
+      .where('slug', params.slug)
+      .preload('seasons', (seasonsQuery) => {
+        seasonsQuery.orderBy('number').preload('episodes', (episodesQuery) => {
+          episodesQuery.orderBy('number')
+        })
       })
-      .preload('season')
       .firstOrFail()
 
-    return view.render('pages/animes/watch', { anime, episode })
+    const episodes = anime.seasons.flatMap((season) => season.episodes)
+    const currentIndex = episodes.findIndex((episode) => episode.id === Number(params.episodeId))
+
+    if (currentIndex === -1) {
+      return view.render('pages/errors/not_found')
+    }
+
+    const episode = episodes[currentIndex]
+    const season = anime.seasons.find((item) => item.id === episode.seasonId)!
+    const nextEpisode = episodes[currentIndex + 1] ?? null
+
+    return view.render('pages/animes/watch', { anime, episode, season, nextEpisode })
   }
 }
