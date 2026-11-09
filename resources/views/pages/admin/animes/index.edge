@@ -23,6 +23,8 @@
             <td>{{ anime.status === 'ongoing' ? 'Em lançamento' : 'Finalizado' }}</td>
             <td>{{ anime.createdAt.toFormat('dd/MM/yyyy') }}</td>
             <td>
+              <a href="/admin/animes/{{ anime.id }}">Gerenciar</a>
+
               <form
                 method="POST"
                 action="/admin/animes/{{ anime.id }}?_method=DELETE"

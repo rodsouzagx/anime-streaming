@@ -35,10 +35,18 @@ router
     router.on('/').render('pages/admin/dashboard').as('admin.dashboard')
     router.get('/users', [controllers.AdminUsers, 'index']).as('admin.users.index')
 
+    // Animes
     router.get('/animes', [controllers.AdminAnimes, 'index']).as('admin.animes.index')
     router.get('/animes/create', [controllers.AdminAnimes, 'create']).as('admin.animes.create')
     router.post('/animes', [controllers.AdminAnimes, 'store']).as('admin.animes.store')
+    router.get('/animes/:id', [controllers.AdminAnimes, 'show']).as('admin.animes.show')
     router.delete('/animes/:id', [controllers.AdminAnimes, 'destroy']).as('admin.animes.destroy')
+
+    // Temporadas
+    router
+      .post('/animes/:animeId/seasons', [controllers.AdminSeasons, 'store'])
+      .as('admin.seasons.store')
+    router.delete('/seasons/:id', [controllers.AdminSeasons, 'destroy']).as('admin.seasons.destroy')
   })
   .prefix('/admin')
   .use([middleware.auth(), middleware.admin()])

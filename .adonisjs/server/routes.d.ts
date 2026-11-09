@@ -16,7 +16,10 @@ export type ScannedRoutes = {
     'admin.animes.index': { paramsTuple?: []; params?: {} }
     'admin.animes.create': { paramsTuple?: []; params?: {} }
     'admin.animes.store': { paramsTuple?: []; params?: {} }
+    'admin.animes.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.animes.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.seasons.store': { paramsTuple: [ParamValue]; params: {'animeId': ParamValue} }
+    'admin.seasons.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
@@ -27,6 +30,7 @@ export type ScannedRoutes = {
     'admin.users.index': { paramsTuple?: []; params?: {} }
     'admin.animes.index': { paramsTuple?: []; params?: {} }
     'admin.animes.create': { paramsTuple?: []; params?: {} }
+    'admin.animes.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
@@ -37,15 +41,18 @@ export type ScannedRoutes = {
     'admin.users.index': { paramsTuple?: []; params?: {} }
     'admin.animes.index': { paramsTuple?: []; params?: {} }
     'admin.animes.create': { paramsTuple?: []; params?: {} }
+    'admin.animes.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   POST: {
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'admin.animes.store': { paramsTuple?: []; params?: {} }
+    'admin.seasons.store': { paramsTuple: [ParamValue]; params: {'animeId': ParamValue} }
   }
   DELETE: {
     'admin.animes.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.seasons.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {
