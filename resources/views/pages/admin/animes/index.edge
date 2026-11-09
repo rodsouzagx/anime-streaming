@@ -1,42 +1,84 @@
 @layouts.app({ title: 'Animes' })
-  @page()
-    <h1>Animes</h1>
-    <p><a href="/admin/animes/create">+ Cadastrar anime</a></p>
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Título</th>
-          <th>Status</th>
-          <th>Cadastrado em</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        @each(anime in animes)
-          <tr>
-            <td>{{ anime.id }}</td>
-            <td>
-              <img src="/{{ anime.coverPath }}" alt="" width="40" />
-              {{ anime.title }}
-            </td>
-            <td>{{ anime.status === 'ongoing' ? 'Em lançamento' : 'Finalizado' }}</td>
-            <td>{{ anime.createdAt.toFormat('dd/MM/yyyy') }}</td>
-            <td>
-              <a href="/admin/animes/{{ anime.id }}">Gerenciar</a>
+  @page({ title: 'Animes', description: `${animes.length} anime(s) cadastrado(s).` })
+    @slot('actions')
+      @ui.button({ href: '/admin/animes/create' })
+        @svg('lucide:plus', { width: 16, height: 16 })
+        <span>Cadastrar anime</span>
+      @end
+    @end
+    @if(animes.length === 0)
+      <div class="rounded-lg border border-dashed border-border py-16 text-center">
+        <p class="type-h3">Nenhum anime cadastrado</p>
+        <p class="mt-1 type-meta">Comece cadastrando o primeiro anime da plataforma.</p>
+      </div>
+    @else
+      <div class="overflow-x-auto rounded-lg border border-border">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-surface">
+            <tr>
+              <th class="px-4 py-3 type-caption">Anime</th>
+              <th class="px-4 py-3 type-caption">Status</th>
+              <th class="px-4 py-3 type-caption">Cadastrado em</th>
+              <th class="px-4 py-3 text-right type-caption">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border">
+            @each(anime in animes)
+              <tr class="transition-colors duration-150 hover:bg-surface/60">
+                <td class="px-4 py-3">
+                  <div class="flex items-center gap-3">
+                    <img
+                      src="/{{ anime.coverPath }}"
+                      alt=""
+                      class="h-14 w-10 shrink-0 rounded object-cover"
+                    />
+                    <div class="min-w-0">
+                      <p class="truncate font-semibold">{{ anime.title }}</p>
+                      <a href="/animes/{{ anime.slug }}" class="type-meta hover:text-accent">
+                        /animes/{{ anime.slug }}
+                      </a>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-4 py-3">
+                  @if(anime.status === 'ongoing')
+                    <span class="rounded-md bg-accent/10 px-2 py-1 text-xs font-medium text-accent">
+                      Em lançamento
+                    </span>
+                  @else
+                    <span class="rounded-md bg-surface-2 px-2 py-1 text-xs font-medium text-muted">
+                      Finalizado
+                    </span>
+                  @end
+                </td>
+                <td class="px-4 py-3 type-meta">{{ anime.createdAt.toFormat('dd/MM/yyyy') }}</td>
+                <td class="px-4 py-3">
+                  <div class="flex justify-end gap-2">
+                    @ui.button({
+                      href: `/admin/animes/${anime.id}`,
+                      variant: 'secondary',
+                      size: 'sm',
+                    })
+                      Gerenciar
+                    @end
 
-              <form
-                method="POST"
-                action="/admin/animes/{{ anime.id }}?_method=DELETE"
-                onsubmit="return confirm('Tem certeza que deseja remover este anime?')"
-              >
-                {{ csrfField() }}
-                <button type="submit">Remover</button>
-              </form>
-            </td>
-          </tr>
-        @end
-      </tbody>
-    </table>
+                    <form
+                      method="POST"
+                      action="/admin/animes/{{ anime.id }}?_method=DELETE"
+                      onsubmit="return confirm('Remover este anime, com todas as temporadas e episódios?')"
+                    >
+                      {{ csrfField() }}
+                      @ui.button({ type: 'submit', variant: 'danger', size: 'sm' })
+                        Remover
+                      @end
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            @end
+          </tbody>
+        </table>
+      </div>
+    @end
   @end
 @end
