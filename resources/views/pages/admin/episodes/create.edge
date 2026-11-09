@@ -1,58 +1,48 @@
 @layouts.app({ title: 'Adicionar episódio' })
-  @page()
-    <p><a href="/admin/animes/{{ season.animeId }}">← Voltar para {{ season.anime.title }}</a></p>
-
-    <h1>{{ season.anime.title }}: Temporada {{ season.number }}</h1>
-    <h2>Adicionar episódio</h2>
-
+  @page({
+    title: 'Adicionar episódio',
+    description: `${season.anime.title} · Temporada ${season.number}`,
+  })
     <form
       method="POST"
       action="/admin/seasons/{{ season.id }}/episodes"
       enctype="multipart/form-data"
+      class="flex max-w-3xl flex-col gap-6 rounded-lg border border-border bg-surface/50 p-6"
     >
       {{ csrfField() }}
-      <p>
-        <label>Número *</label>
-        <br />
-        <input type="number" name="number" min="1" value="{{ season.episodes.length + 1 }}" />
-        @inputError('number')
-          @each(message in $messages)
-            <br />
-            <small>{{ message }}</small>
-          @end
-        @end
-      </p>
+      <div class="grid gap-6 sm:grid-cols-[120px_1fr]">
+        @!ui.input({
+          name: 'number',
+          label: 'Número',
+          type: 'number',
+          required: true,
+          value: season.episodes.length + 1,
+        })
+        @!ui.input({
+          name: 'title',
+          label: 'Título',
+          required: true,
+          placeholder: 'Ex: O fim da jornada',
+        })
+      </div>
+      @!ui.textarea({ name: 'synopsis', label: 'Sinopse', rows: 3, hint: 'Opcional.' })
+      @!ui.input({
+        name: 'video',
+        label: 'Vídeo',
+        type: 'file',
+        accept: 'video/mp4,video/webm',
+        required: true,
+        hint: 'mp4 ou webm, até 500 MB. O envio pode levar alguns segundos.',
+      })
 
-      <p>
-        <label>Título *</label>
-        <br />
-        <input type="text" name="title" value="{{ old('title') || '' }}" />
-        @inputError('title')
-          @each(message in $messages)
-            <br />
-            <small>{{ message }}</small>
-          @end
+      <div class="flex justify-end gap-3 border-t border-border pt-6">
+        @ui.button({ href: `/admin/animes/${season.animeId}`, variant: 'ghost' })
+          Cancelar
         @end
-      </p>
-
-      <p>
-        <label>Sinopse (opcional)</label>
-        <br />
-        <textarea name="synopsis" rows="4">{{ old('synopsis') || '' }}</textarea>
-      </p>
-
-      <p>
-        <label>Vídeo * (mp4 ou webm, até 500 MB)</label>
-        <br />
-        <input type="file" name="video" accept="video/mp4,video/webm" />
-        @inputError('video')
-          @each(message in $messages)
-            <br />
-            <small>{{ message }}</small>
-          @end
+        @ui.button({ type: 'submit' })
+          Adicionar episódio
         @end
-      </p>
-      <button type="submit">Adicionar episódio</button>
+      </div>
     </form>
   @end
 @end
