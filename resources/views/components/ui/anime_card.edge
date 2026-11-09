@@ -1,0 +1,25 @@
+@let(anime = $props.get('anime'))
+
+<a
+  href="/animes/{{ anime.slug }}"
+  class="group block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+>
+  <div class="relative aspect-2/3 overflow-hidden rounded-lg bg-surface">
+    <img
+      src="/{{ anime.coverPath }}"
+      alt="{{ anime.title }}"
+      loading="lazy"
+      class="size-full object-cover transition duration-300 ease-smooth motion-safe:group-hover:scale-105"
+    />
+    <div
+      class="absolute inset-0 bg-linear-to-t from-background/80 to-transparent to-50% opacity-0 transition duration-300 ease-smooth group-hover:opacity-100"
+    ></div>
+  </div>
+
+  <h3 class="type-h3 mt-3 line-clamp-2 transition-colors duration-150 group-hover:text-accent">
+    {{ anime.title }}
+  </h3>
+  @if(anime.releaseYear)
+    <p class="type-meta">{{ anime.releaseYear }}</p>
+  @end
+</a>

@@ -1,21 +1,37 @@
+@let(firstEpisode = anime.seasons.find((season) => season.episodes.length)?.episodes[0])
 @layouts.app({ title: anime.title })
-  @page()
-    <p><a href="/animes">← Voltar ao catálogo</a></p>
+  {{-- Banner --}}
+  <section class="relative h-56 overflow-hidden bg-surface sm:h-80">
     @if(anime.bannerPath)
+      <img src="/{{ anime.bannerPath }}" alt="" class="size-full object-cover" />
+    @else
       <img
-        src="/{{ anime.bannerPath }}"
+        src="/{{ anime.coverPath }}"
         alt=""
-        style="width: 100%; max-height: 300px; object-fit: cover;"
+        class="size-full scale-110 object-cover opacity-40 blur-2xl"
       />
     @end
 
-    <div style="display: flex; gap: 24px; margin-top: 16px;">
-      <img src="/{{ anime.coverPath }}" alt="{{ anime.title }}" width="200" />
+    <div
+      class="absolute inset-0 bg-linear-to-t from-background via-background/40 to-transparent"
+    ></div>
+  </section>
 
-      <div>
-        <h1>{{ anime.title }}</h1>
+  <div class="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
+    {{-- Capa + informações --}}
+    <div
+      class="relative -mt-24 flex flex-col gap-6 sm:-mt-32 sm:flex-row sm:items-end motion-safe:animate-fade-up"
+    >
+      <img
+        src="/{{ anime.coverPath }}"
+        alt="{{ anime.title }}"
+        class="aspect-2/3 w-36 shrink-0 rounded-lg object-cover shadow-2xl shadow-black/60 ring-1 ring-border sm:w-52"
+      />
 
-        <p>
+      <div class="flex flex-col gap-3">
+        <h1 class="type-display">{{ anime.title }}</h1>
+
+        <p class="type-meta">
           {{ anime.status === 'ongoing' ? 'Em lançamento' : 'Finalizado' }}
           @if(anime.releaseYear)
             ·
@@ -31,30 +47,74 @@
           @end
         </p>
         @if(anime.genres.length)
-          <p>Gêneros: {{ anime.genres.map((genre) => genre.name).join(', ') }}</p>
+          <div class="flex flex-wrap gap-2">
+            @each(genre in anime.genres)
+              <span class="rounded-md border border-border px-2 py-1 type-caption">
+                {{ genre.name }}
+              </span>
+            @end
+          </div>
         @end
-
-        <p>{{ anime.synopsis }}</p>
+        @if(firstEpisode)
+          <div class="mt-2">
+            @ui.button({
+              href: `/animes/${anime.slug}/episodes/${firstEpisode.id}`,
+              size: 'lg',
+            })
+              @svg('lucide:play', { width: 18, height: 18 })
+              <span>Assistir</span>
+            @end
+          </div>
+        @end
       </div>
     </div>
+    {{-- Sinopse --}}
+    <p class="mt-8 max-w-3xl type-body text-foreground/80">{{ anime.synopsis }}</p>
+    {{-- Episódios --}}
+    <section class="mt-12">
+      <h2 class="type-h2">Episódios</h2>
+      @if(anime.seasons.length === 0)
+        <div class="mt-4 rounded-lg border border-dashed border-border py-12 text-center">
+          <p class="type-h3">Nenhum episódio disponível ainda</p>
+          <p class="mt-1 type-meta">Volte em breve.</p>
+        </div>
+      @end
+      @each(season in anime.seasons)
+        <div class="mt-6">
+          <h3 class="mb-3 type-caption">
+            Temporada
+            {{ season.number }}{{ season.title ? ': ' + season.title : '' }}
+          </h3>
 
-    <h2>Episódios</h2>
-    @if(anime.seasons.length === 0)
-      <p>Nenhum episódio disponível ainda.</p>
-    @end
-    @each(season in anime.seasons)
-      <h3>Temporada {{ season.number }}{{ season.title ? ': ' + season.title : '' }}</h3>
-      <ul>
-        @each(episode in season.episodes)
-          <li>
-            <a href="/animes/{{ anime.slug }}/episodes/{{ episode.id }}">
-              Episódio
-              {{ episode.number }}:
-              {{ episode.title }}
-            </a>
-          </li>
-        @end
-      </ul>
-    @end
-  @end
+          <ul class="divide-y divide-border overflow-hidden rounded-lg border border-border">
+            @each(episode in season.episodes)
+              <li>
+                <a
+                  href="/animes/{{ anime.slug }}/episodes/{{ episode.id }}"
+                  class="group flex items-center gap-4 bg-surface px-4 py-3 transition-colors duration-150 hover:bg-surface-2"
+                >
+                  <span
+                    class="w-8 font-display text-2xl font-bold text-muted transition-colors group-hover:text-accent"
+                  >
+                    {{ episode.number }}
+                  </span>
+                  <div class="min-w-0 flex-1">
+                    <p class="truncate type-h3">{{ episode.title }}</p>
+                    @if(episode.synopsis)
+                      <p class="truncate type-meta">{{ episode.synopsis }}</p>
+                    @end
+                  </div>
+                  @svg('lucide:play', {
+                    width: 18,
+                    height: 18,
+                    class: 'text-muted transition-colors group-hover:text-accent',
+                  })
+                </a>
+              </li>
+            @end
+          </ul>
+        </div>
+      @end
+    </section>
+  </div>
 @end

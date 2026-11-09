@@ -1,0 +1,27 @@
+@let(variant = $props.get('variant') ?? 'primary')
+@let(size = $props.get('size') ?? 'md')
+@let(href = $props.get('href'))
+@let(type = $props.get('type') ?? 'button')
+@let(variants = {
+  primary: 'bg-accent text-accent-foreground hover:brightness-110',
+  secondary: 'border border-border bg-surface text-foreground hover:bg-surface-2',
+  ghost: 'text-muted hover:bg-surface hover:text-foreground',
+  danger: 'bg-red-500/10 text-red-400 hover:bg-red-500/20',
+})
+@let(sizes = {
+  sm: 'h-8 px-3 text-sm',
+  md: 'h-10 px-4 text-sm',
+  lg: 'h-12 px-6 text-base',
+})
+@let(classes = [
+  'inline-flex items-center justify-center gap-2 rounded-md font-semibold whitespace-nowrap',
+  'transition duration-150 ease-smooth motion-safe:active:scale-[0.97]',
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+  variants[variant],
+  sizes[size],
+].join(' '))
+@if(href)
+  <a href="{{ href }}" class="{{ classes }}">{{{ await $slots.main() }}}</a>
+@else
+  <button type="{{ type }}" class="{{ classes }}">{{{ await $slots.main() }}}</button>
+@end

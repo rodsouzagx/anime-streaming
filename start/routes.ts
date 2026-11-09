@@ -18,11 +18,6 @@ router.get('/animes', [controllers.Animes, 'index']).as('animes.index')
 router.get('/animes/:slug', [controllers.Animes, 'show']).as('animes.show')
 router.get('/animes/:slug/episodes/:episodeId', [controllers.Animes, 'watch']).as('animes.watch')
 
-// Catálogo público
-router.get('/animes', [controllers.Animes, 'index']).as('animes.index')
-router.get('/animes/:slug', [controllers.Animes, 'show']).as('animes.show')
-router.get('/animes/:slug/episodes/:episodeId', [controllers.Animes, 'watch']).as('animes.watch')
-
 router
   .group(() => {
     router.get('signup', [controllers.NewAccount, 'create'])

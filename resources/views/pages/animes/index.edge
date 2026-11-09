@@ -1,28 +1,36 @@
 @layouts.app({ title: 'Catálogo' })
-  @page()
-    <h1>Catálogo</h1>
-
-    <form method="GET" action="/animes">
-      <input type="search" name="q" value="{{ search }}" placeholder="Buscar anime pelo nome..." />
-      <button type="submit">Buscar</button>
+  @page({ title: 'Catálogo', description: 'Todos os animes disponíveis na plataforma.' })
+    <form method="GET" action="/animes" class="mb-8 flex max-w-lg items-start gap-2">
+      <div class="flex-1">
+        @!ui.input({
+          name: 'q',
+          type: 'search',
+          value: search,
+          placeholder: 'Buscar anime pelo nome...',
+        })
+      </div>
+      @ui.button({ type: 'submit' })
+        @svg('lucide:search', { width: 16, height: 16 })
+        <span>Buscar</span>
+      @end
     </form>
     @if(search)
-      <p>
+      <p class="mb-6 type-meta">
         {{ animes.length }}
-        resultado(s) para "{{ search }}".
-        <a href="/animes">Limpar busca</a>
+        resultado(s) para "<span class="text-foreground">{{ search }}</span>".
+        <a href="/animes" class="ml-2 text-accent hover:underline">Limpar busca</a>
       </p>
     @end
     @if(animes.length === 0)
-      <p>Nenhum anime encontrado.</p>
+      <div class="rounded-lg border border-dashed border-border py-16 text-center">
+        <p class="type-h3">Nenhum anime encontrado</p>
+        <p class="mt-1 type-meta">Tente buscar por outro nome.</p>
+      </div>
     @end
 
-    <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
       @each(anime in animes)
-        <a href="/animes/{{ anime.slug }}" style="width: 150px;">
-          <img src="/{{ anime.coverPath }}" alt="{{ anime.title }}" width="150" />
-          <p>{{ anime.title }}</p>
-        </a>
+        @!ui.animeCard({ anime })
       @end
     </div>
   @end

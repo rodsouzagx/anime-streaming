@@ -1,22 +1,75 @@
-@layouts.app({ title: anime.title + ' - Episódio ' + episode.number })
-  @page()
-    <p><a href="/animes/{{ anime.slug }}">← Voltar para {{ anime.title }}</a></p>
+@layouts.app({ title: `${anime.title} - Episódio ${episode.number}` })
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+    <div class="grid gap-8 lg:grid-cols-[1fr_340px]">
+      {{-- Player e informações --}}
+      <div class="min-w-0">
+        <div class="overflow-hidden rounded-lg bg-black ring-1 ring-border">
+          <video
+            src="/{{ episode.videoPath }}"
+            controls
+            autoplay
+            class="aspect-video w-full"
+          ></video>
+        </div>
 
-    <video
-      src="/{{ episode.videoPath }}"
-      controls
-      style="width: 100%; max-height: 70vh; background: black;"
-    ></video>
-
-    <h1>{{ anime.title }}</h1>
-    <h2>
-      Temporada
-      {{ episode.season.number }}, Episódio
-      {{ episode.number }}:
-      {{ episode.title }}
-    </h2>
-    @if(episode.synopsis)
-      <p>{{ episode.synopsis }}</p>
-    @end
-  @end
+        <div class="mt-6 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <a
+              href="/animes/{{ anime.slug }}"
+              class="type-caption transition-colors hover:text-accent"
+            >
+              {{ anime.title }}
+            </a>
+            <h1 class="mt-1 type-h1">{{ episode.title }}</h1>
+            <p class="mt-1 type-meta">
+              Temporada
+              {{ season.number }}
+              · Episódio
+              {{ episode.number }}
+            </p>
+          </div>
+          @if(nextEpisode)
+            @ui.button({
+              href: `/animes/${anime.slug}/episodes/${nextEpisode.id}`,
+              variant: 'secondary',
+            })
+              <span>Próximo episódio</span>
+              @svg('lucide:skip-forward', { width: 16, height: 16 })
+            @end
+          @end
+        </div>
+        @if(episode.synopsis)
+          <p class="mt-4 max-w-3xl type-body text-foreground/80">{{ episode.synopsis }}</p>
+        @end
+      </div>
+      {{-- Lista de episódios --}}
+      <aside>
+        <h2 class="mb-3 type-h2">Episódios</h2>
+        <div class="flex max-h-[70vh] flex-col gap-4 overflow-y-auto">
+          @each(item in anime.seasons)
+            <div>
+              <p class="mb-2 type-caption">Temporada {{ item.number }}</p>
+              <ul class="flex flex-col gap-1">
+                @each(ep in item.episodes)
+                  <li>
+                    <a
+                      href="/animes/{{ anime.slug }}/episodes/{{ ep.id }}"
+                      class="flex items-center gap-3 rounded-md px-3 py-2 transition-colors duration-150 {{
+                        ep.id === episode.id
+                          ? 'bg-accent/10 text-accent'
+                          : 'text-foreground hover:bg-surface'
+                      }}"
+                    >
+                      <span class="w-6 font-display text-lg font-bold">{{ ep.number }}</span>
+                      <span class="truncate text-sm">{{ ep.title }}</span>
+                    </a>
+                  </li>
+                @end
+              </ul>
+            </div>
+          @end
+        </div>
+      </aside>
+    </div>
+  </div>
 @end
