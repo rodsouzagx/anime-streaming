@@ -29,3 +29,10 @@ router
     router.post('logout', [controllers.Session, 'destroy'])
   })
   .use(middleware.auth())
+
+router
+  .group(() => {
+    router.on('/').render('pages/admin/dashboard').as('admin.dashboard')
+  })
+  .prefix('/admin')
+  .use([middleware.auth(), middleware.admin()])
