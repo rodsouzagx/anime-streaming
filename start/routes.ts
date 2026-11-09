@@ -34,6 +34,9 @@ router
   .group(() => {
     router.on('/').render('pages/admin/dashboard').as('admin.dashboard')
     router.get('/users', [controllers.AdminUsers, 'index']).as('admin.users.index')
+
+    router.get('/animes', [controllers.AdminAnimes, 'index']).as('admin.animes.index')
+    router.delete('/animes/:id', [controllers.AdminAnimes, 'destroy']).as('admin.animes.destroy')
   })
   .prefix('/admin')
   .use([middleware.auth(), middleware.admin()])
