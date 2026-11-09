@@ -1,66 +1,125 @@
 @layouts.app({ title: anime.title })
-  @page()
-    <p><a href="/admin/animes">← Voltar para animes</a></p>
+  @page({
+    title: anime.title,
+    description: `${anime.seasons.length} temporada(s) cadastrada(s).`,
+  })
+    @slot('actions')
+      @ui.button({ href: '/admin/animes', variant: 'ghost' })
+        @svg('lucide:arrow-left', { width: 16, height: 16 })
+        <span>Voltar</span>
+      @end
+      @ui.button({ href: `/animes/${anime.slug}`, variant: 'secondary' })
+        @svg('lucide:external-link', { width: 16, height: 16 })
+        <span>Ver no site</span>
+      @end
+    @end
 
-    <h1>{{ anime.title }}</h1>
-    <img src="/{{ anime.coverPath }}" alt="" width="120" />
+    <div class="grid gap-8 lg:grid-cols-[1fr_300px]">
+      {{-- Temporadas --}}
+      <div class="flex flex-col gap-6">
+        @if(anime.seasons.length === 0)
+          <div class="rounded-lg border border-dashed border-border py-16 text-center">
+            <p class="type-h3">Nenhuma temporada ainda</p>
+            <p class="mt-1 type-meta">Adicione a primeira temporada no formulário ao lado.</p>
+          </div>
+        @end
+        @each(season in anime.seasons)
+          <section class="overflow-hidden rounded-lg border border-border">
+            <header
+              class="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-surface px-4 py-3"
+            >
+              <div>
+                <h2 class="font-display text-xl font-bold tracking-wide uppercase">
+                  Temporada
+                  {{ season.number }}
+                </h2>
+                @if(season.title)
+                  <p class="type-meta">{{ season.title }}</p>
+                @end
+              </div>
+              <div class="flex items-center gap-2">
+                @ui.button({
+                  href: `/admin/seasons/${season.id}/episodes/create`,
+                  variant: 'secondary',
+                  size: 'sm',
+                })
+                  @svg('lucide:plus', { width: 14, height: 14 })
+                  <span>Episódio</span>
+                @end
 
-    <h2>Temporadas</h2>
-    @each(season in anime.seasons)
-      <div style="margin-bottom: 24px;">
-        <h3>Temporada {{ season.number }}{{ season.title ? ': ' + season.title : '' }}</h3>
-
-        <ul>
-          @each(episode in season.episodes)
-            <li>
-              
-              Episódio
-              {{ episode.number }}
-              :
-              {{ episode.title }}
-              <form
-                method="POST"
-                action="/admin/episodes/{{ episode.id }}?_method=DELETE"
-                style="display: inline;"
-                onsubmit="return confirm('Remover este episódio?')"
-              >
-                {{ csrfField() }}
-                <button type="submit">Remover</button>
-              </form>
-            </li>
-          @end
-        </ul>
-
-        <p><a href="/admin/seasons/{{ season.id }}/episodes/create">+ Adicionar episódio</a></p>
+                <form
+                  method="POST"
+                  action="/admin/seasons/{{ season.id }}?_method=DELETE"
+                  onsubmit="return confirm('Remover esta temporada e todos os episódios dela?')"
+                >
+                  {{ csrfField() }}
+                  @ui.button({ type: 'submit', variant: 'danger', size: 'sm' })
+                    Remover
+                  @end
+                </form>
+              </div>
+            </header>
+            @if(season.episodes.length === 0)
+              <p class="px-4 py-8 text-center type-meta">Nenhum episódio nesta temporada.</p>
+            @else
+              <ul class="divide-y divide-border">
+                @each(episode in season.episodes)
+                  <li
+                    class="flex items-center gap-4 px-4 py-3 transition-colors duration-150 hover:bg-surface/60"
+                  >
+                    <span class="w-8 font-display text-2xl font-bold text-muted">
+                      {{ episode.number }}
+                    </span>
+                    <p class="min-w-0 flex-1 truncate font-semibold">{{ episode.title }}</p>
+                    <form
+                      method="POST"
+                      action="/admin/episodes/{{ episode.id }}?_method=DELETE"
+                      onsubmit="return confirm('Remover este episódio?')"
+                    >
+                      {{ csrfField() }}
+                      @ui.button({ type: 'submit', variant: 'ghost', size: 'sm' })
+                        @svg('lucide:trash-2', { width: 15, height: 15 })
+                      @end
+                    </form>
+                  </li>
+                @end
+              </ul>
+            @end
+          </section>
+        @end
+      </div>
+      {{-- Lateral --}}
+      <aside class="flex flex-col gap-6">
+        <img
+          src="/{{ anime.coverPath }}"
+          alt="{{ anime.title }}"
+          class="hidden aspect-2/3 w-full rounded-lg object-cover ring-1 ring-border lg:block"
+        />
 
         <form
           method="POST"
-          action="/admin/seasons/{{ season.id }}?_method=DELETE"
-          onsubmit="return confirm('Remover esta temporada e todos os episódios dela?')"
+          action="/admin/animes/{{ anime.id }}/seasons"
+          class="flex flex-col gap-4 rounded-lg border border-border bg-surface/50 p-4"
         >
           {{ csrfField() }}
-          <button type="submit">Remover temporada</button>
+          <h2 class="type-h3">Adicionar temporada</h2>
+          @!ui.input({
+            name: 'number',
+            label: 'Número',
+            type: 'number',
+            required: true,
+            value: anime.seasons.length + 1,
+          })
+          @!ui.input({
+            name: 'title',
+            label: 'Título',
+            hint: 'Opcional. Ex: Arco da Sociedade das Almas.',
+          })
+          @ui.button({ type: 'submit' })
+            Adicionar temporada
+          @end
         </form>
-      </div>
-    @end
-
-    <h2>Adicionar temporada</h2>
-
-    <form method="POST" action="/admin/animes/{{ anime.id }}/seasons">
-      {{ csrfField() }}
-      <p>
-        <label>Número *</label>
-        <br />
-        <input type="number" name="number" min="1" value="{{ anime.seasons.length + 1 }}" />
-      </p>
-
-      <p>
-        <label>Título (opcional)</label>
-        <br />
-        <input type="text" name="title" />
-      </p>
-
-      <button type="submit">Adicionar temporada</button>
-    </form>
+      </aside>
+    </div>
   @end
 @end

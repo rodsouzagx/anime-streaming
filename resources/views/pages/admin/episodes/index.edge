@@ -1,0 +1,73 @@
+@layouts.app({ title: 'Episódios' })
+  @page({
+    title: 'Episódios',
+    description: `${episodes.length} episódio(s) cadastrado(s).`,
+  })
+    @if(episodes.length === 0)
+      <div class="rounded-lg border border-dashed border-border py-16 text-center">
+        <p class="type-h3">Nenhum episódio cadastrado</p>
+        <p class="mt-1 type-meta">
+          Os episódios são adicionados na página de gerenciamento de cada anime.
+        </p>
+      </div>
+    @else
+      <div class="overflow-x-auto rounded-lg border border-border">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-surface">
+            <tr>
+              <th class="px-4 py-3 type-caption">Episódio</th>
+              <th class="px-4 py-3 type-caption">Anime</th>
+              <th class="px-4 py-3 type-caption">Cadastrado em</th>
+              <th class="px-4 py-3 text-right type-caption">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border">
+            @each(episode in episodes)
+              <tr class="transition-colors duration-150 hover:bg-surface/60">
+                <td class="px-4 py-3">
+                  <div class="flex items-center gap-3">
+                    <span class="w-8 font-display text-2xl font-bold text-muted">
+                      {{ episode.number }}
+                    </span>
+                    <p class="min-w-0 truncate font-semibold">{{ episode.title }}</p>
+                  </div>
+                </td>
+                <td class="px-4 py-3">
+                  <a
+                    href="/admin/animes/{{ episode.season.anime.id }}"
+                    class="flex items-center gap-3 hover:text-accent"
+                  >
+                    <img
+                      src="/{{ episode.season.anime.coverPath }}"
+                      alt=""
+                      class="h-10 w-7 shrink-0 rounded object-cover"
+                    />
+                    <div class="min-w-0">
+                      <p class="truncate">{{ episode.season.anime.title }}</p>
+                      <p class="type-meta">Temporada {{ episode.season.number }}</p>
+                    </div>
+                  </a>
+                </td>
+                <td class="px-4 py-3 type-meta">{{ episode.createdAt.toFormat('dd/MM/yyyy') }}</td>
+                <td class="px-4 py-3">
+                  <div class="flex justify-end">
+                    <form
+                      method="POST"
+                      action="/admin/episodes/{{ episode.id }}?_method=DELETE"
+                      onsubmit="return confirm('Remover este episódio?')"
+                    >
+                      {{ csrfField() }}
+                      @ui.button({ type: 'submit', variant: 'ghost', size: 'sm' })
+                        @svg('lucide:trash-2', { width: 15, height: 15 })
+                      @end
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            @end
+          </tbody>
+        </table>
+      </div>
+    @end
+  @end
+@end

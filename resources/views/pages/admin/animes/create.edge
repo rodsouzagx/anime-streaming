@@ -1,99 +1,82 @@
 @layouts.app({ title: 'Cadastrar anime' })
-  @page()
-    <h1>Cadastrar anime</h1>
-
-    <form method="POST" action="/admin/animes" enctype="multipart/form-data">
+  @page({
+    title: 'Cadastrar anime',
+    description:
+      'Temporadas e episódios são adicionados depois, na página de gerenciamento.',
+  })
+    <form
+      method="POST"
+      action="/admin/animes"
+      enctype="multipart/form-data"
+      class="flex max-w-3xl flex-col gap-6 rounded-lg border border-border bg-surface/50 p-6"
+    >
       {{ csrfField() }}
-      <p>
-        <label>Título *</label>
-        <br />
-        <input type="text" name="title" value="{{ old('title') || '' }}" />
-        @inputError('title')
-          @each(message in $messages)
-            <br />
-            <small>{{ message }}</small>
-          @end
+      @!ui.input({
+        name: 'title',
+        label: 'Título',
+        required: true,
+        placeholder: 'Ex: Frieren',
+      })
+      @!ui.textarea({ name: 'synopsis', label: 'Sinopse', required: true, rows: 5 })
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        @!ui.select({
+          name: 'status',
+          label: 'Status',
+          required: true,
+          options: [
+            { value: 'ongoing', label: 'Em lançamento' },
+            { value: 'finished', label: 'Finalizado' },
+          ],
+        })
+        @!ui.select({
+          name: 'ageRating',
+          label: 'Classificação indicativa',
+          options: [
+            { value: '', label: 'Não informada' },
+            { value: 'L', label: 'Livre' },
+            { value: '10', label: '10 anos' },
+            { value: '12', label: '12 anos' },
+            { value: '14', label: '14 anos' },
+            { value: '16', label: '16 anos' },
+            { value: '18', label: '18 anos' },
+          ],
+        })
+        @!ui.input({
+          name: 'releaseYear',
+          label: 'Ano de lançamento',
+          type: 'number',
+          placeholder: 'Ex: 2023',
+        })
+        @!ui.input({ name: 'studio', label: 'Estúdio', placeholder: 'Ex: Madhouse' })
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        @!ui.input({
+          name: 'cover',
+          label: 'Capa',
+          type: 'file',
+          accept: 'image/*',
+          required: true,
+          hint: 'Formato pôster (vertical). jpg, png ou webp, até 5 MB.',
+        })
+        @!ui.input({
+          name: 'banner',
+          label: 'Banner',
+          type: 'file',
+          accept: 'image/*',
+          hint: 'Opcional. Imagem larga, exibida no topo da página do anime.',
+        })
+      </div>
+
+      <div class="flex justify-end gap-3 border-t border-border pt-6">
+        @ui.button({ href: '/admin/animes', variant: 'ghost' })
+          Cancelar
         @end
-      </p>
-
-      <p>
-        <label>Sinopse *</label>
-        <br />
-        <textarea name="synopsis" rows="5">{{ old('synopsis') || '' }}</textarea>
-        @inputError('synopsis')
-          @each(message in $messages)
-            <br />
-            <small>{{ message }}</small>
-          @end
+        @ui.button({ type: 'submit' })
+          Cadastrar anime
         @end
-      </p>
-
-      <p>
-        <label>Status *</label>
-        <br />
-        <select name="status">
-          <option value="ongoing">Em lançamento</option>
-          <option value="finished">Finalizado</option>
-        </select>
-      </p>
-
-      <p>
-        <label>Ano de lançamento</label>
-        <br />
-        <input type="number" name="releaseYear" value="{{ old('releaseYear') || '' }}" />
-        @inputError('releaseYear')
-          @each(message in $messages)
-            <br />
-            <small>{{ message }}</small>
-          @end
-        @end
-      </p>
-
-      <p>
-        <label>Estúdio</label>
-        <br />
-        <input type="text" name="studio" value="{{ old('studio') || '' }}" />
-      </p>
-
-      <p>
-        <label>Classificação indicativa</label>
-        <br />
-        <select name="ageRating">
-          <option value="">Não informada</option>
-          <option value="L">Livre</option>
-          <option value="10">10 anos</option>
-          <option value="12">12 anos</option>
-          <option value="14">14 anos</option>
-          <option value="16">16 anos</option>
-          <option value="18">18 anos</option>
-        </select>
-      </p>
-
-      <p>
-        <label>Capa * (jpg, png ou webp, até 5 MB)</label>
-        <br />
-        <input type="file" name="cover" accept="image/*" />
-        @inputError('cover')
-          @each(message in $messages)
-            <br />
-            <small>{{ message }}</small>
-          @end
-        @end
-      </p>
-
-      <p>
-        <label>Banner (opcional)</label>
-        <br />
-        <input type="file" name="banner" accept="image/*" />
-        @inputError('banner')
-          @each(message in $messages)
-            <br />
-            <small>{{ message }}</small>
-          @end
-        @end
-      </p>
-
-      <button type="submit">Cadastrar</button>
+      </div>
     </form>
   @end
 @end

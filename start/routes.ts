@@ -37,7 +37,8 @@ router
 
 router
   .group(() => {
-    router.on('/').render('pages/admin/dashboard').as('admin.dashboard')
+    router.get('/episodes', [controllers.AdminEpisodes, 'index']).as('admin.episodes.index')
+    router.get('/', [controllers.AdminDashboard, 'index']).as('admin.dashboard')
     router.get('/users', [controllers.AdminUsers, 'index']).as('admin.users.index')
 
     // Animes
