@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite'
 import adonisjs from '@adonisjs/vite/client'
+import tailwindcss from '@tailwindcss/vite' // ← novo
 
 export default defineConfig({
   plugins: [
+    tailwindcss(), // ← novo
     adonisjs({
       /**
        * Entrypoints of your application. Each entrypoint will
