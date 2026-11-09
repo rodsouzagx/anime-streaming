@@ -1,23 +1,28 @@
-/*
-|--------------------------------------------------------------------------
-| Validator file
-|--------------------------------------------------------------------------
-|
-| The validator file is used for configuring global transforms for VineJS.
-| The transform below converts all VineJS date outputs from JavaScript
-| Date objects to Luxon DateTime instances, so that validated dates are
-| ready to use with Lucid models and other parts of the app that expect
-| Luxon DateTime.
-|
-*/
+import vine, { SimpleMessagesProvider } from '@vinejs/vine'
 
-import { DateTime } from 'luxon'
-import { VineDate } from '@vinejs/vine'
-
-declare module '@vinejs/vine/types' {
-  interface VineGlobalTransforms {
-    date: DateTime
+vine.messagesProvider = new SimpleMessagesProvider(
+  {
+    'required': 'O campo {{ field }} é obrigatório',
+    'string': 'O campo {{ field }} deve ser um texto',
+    'number': 'O campo {{ field }} deve ser um número',
+    'maxLength': 'O campo {{ field }} deve ter no máximo {{ max }} caracteres',
+    'min': 'O campo {{ field }} deve ser no mínimo {{ min }}',
+    'max': 'O campo {{ field }} deve ser no máximo {{ max }}',
+    'enum': 'Selecione uma opção válida para {{ field }}',
+    'database.unique': 'Já existe um registro com este {{ field }}',
+    'file.size': 'O arquivo deve ter no máximo {{ size }}',
+    'file.extname': 'Formato de arquivo inválido. Use: {{ extnames }}',
+  },
+  {
+    title: 'título',
+    synopsis: 'sinopse',
+    status: 'status',
+    releaseYear: 'ano de lançamento',
+    studio: 'estúdio',
+    ageRating: 'classificação indicativa',
+    cover: 'capa',
+    banner: 'banner',
+    number: 'número',
+    video: 'vídeo',
   }
-}
-
-VineDate.transform((value) => DateTime.fromJSDate(value))
+)
