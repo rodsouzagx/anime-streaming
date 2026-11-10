@@ -7,7 +7,6 @@
 @import '@fontsource/barlow-condensed/600.css';
 @import '@fontsource/barlow-condensed/700.css';
 
-@import './kit.css' layer(components);
 @source '../views';
 
 @theme {
@@ -68,4 +67,17 @@
 }
 @utility type-caption {
   @apply font-sans text-xs font-medium tracking-wider text-muted uppercase;
+}
+
+@layer base {
+  /* Esconde elementos do Alpine até ele carregar */
+  [x-cloak] {
+    display: none !important;
+  }
+
+  /* Mostra a "mãozinha" em botões clicáveis */
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
 }
