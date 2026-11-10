@@ -1,61 +1,47 @@
-@layouts.auth()
-  <h1 class="auth__title">Create your account</h1>
-  <p class="auth__sub">Start building with the starter kit.</p>
+@layouts.auth({ title: 'Criar conta' })
+  <h1 class="type-h1">Criar conta</h1>
+  <p class="mt-1 type-meta">Leva menos de um minuto.</p>
   @form({
     route: 'new_account.store',
     method: 'POST',
-    class: 'auth__form',
-    'x-data': '{ submitting: false }',
-    'x-on:submit': 'submitting = true',
+    class: 'mt-8 flex flex-col gap-5',
   })
-    @field.root({ name: 'fullName' })
-      @!field.label({ text: 'Full name' })
-      @!input.control({ autocomplete: 'name', placeholder: 'Ada Lovelace' })
-      @!field.error()
-    @end
-    @field.root({ name: 'email' })
-      @!field.label({ text: 'Email' })
-      @!input.control({
-        type: 'email',
-        autocomplete: 'email',
-        placeholder: 'you@example.com',
-      })
-      @!field.error()
-    @end
-    @field.root({ name: 'password' })
-      @!field.label({ text: 'Password' })
-      @!input.control({
-        type: 'password',
-        autocomplete: 'new-password',
-        placeholder: '••••••••',
-      })
-      @!field.error()
-    @end
-    @field.root({ name: 'passwordConfirmation' })
-      @!field.label({ text: 'Confirm password' })
-      @!input.control({
-        type: 'password',
-        autocomplete: 'new-password',
-        placeholder: '••••••••',
-      })
-      @!field.error()
-    @end
-    @!button({
-      text: 'Create account',
-      type: 'submit',
-      block: true,
-      style: 'margin-top: 4px;',
-      'x-bind:disabled': 'submitting',
-      'x-text': "submitting ? 'One moment…' : 'Create account'",
+    @!ui.input({
+      name: 'fullName',
+      label: 'Nome',
+      autocomplete: 'name',
+      placeholder: 'Como você quer ser chamado',
     })
+    @!ui.input({
+      name: 'email',
+      label: 'E-mail',
+      type: 'email',
+      autocomplete: 'email',
+      placeholder: 'voce@exemplo.com',
+    })
+    @!ui.input({
+      name: 'password',
+      label: 'Senha',
+      type: 'password',
+      autocomplete: 'new-password',
+      placeholder: '••••••••',
+    })
+    @!ui.input({
+      name: 'passwordConfirmation',
+      label: 'Confirme a senha',
+      type: 'password',
+      autocomplete: 'new-password',
+      placeholder: '••••••••',
+    })
+    <div class="mt-2">
+      @ui.button({ type: 'submit', size: 'lg', block: true })
+        Criar conta
+      @end
+    </div>
   @end
 
-  <p class="auth__foot">
-    
-    Already have an account?
-
-    @link({ route: 'session.create', class: 'il' })
-      Sign in
-    @end
+  <p class="mt-6 text-center type-meta">
+    Já tem uma conta?
+    <a href="/login" class="font-medium text-accent hover:underline">Entrar</a>
   </p>
 @end

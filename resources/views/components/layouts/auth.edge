@@ -1,49 +1,35 @@
+@let(pageTitle = $props.get('title'))
 <!DOCTYPE html>
-<html
-  lang="en-us"
-  data-theme="{{
-    request.plainCookie('app_theme', {
-      defaultValue: 'light',
-      encoded: false,
-    })
-  }}"
->
+<html lang="pt-BR" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AdonisJS — Starter Kit</title>
+    <title>{{ pageTitle ? `${pageTitle} - Anime Streaming` : 'Anime Streaming' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('dumper')
   </head>
-  <body>
-    <div class="auth">
-      <div class="auth__form-col">
-        @!logo({ size: 28 })
-        <div class="auth__form-wrap">{{{ await $slots.main() }}}</div>
-        <div style="height: 20px;"></div>
+  <body class="min-h-screen bg-background font-sans text-foreground antialiased">
+    <div class="grid min-h-screen lg:grid-cols-2">
+      {{-- Formulário --}}
+      <div class="flex flex-col px-6 py-8 sm:px-12">
+        <a href="/animes" class="font-display text-2xl font-bold tracking-wide uppercase">
+          Anime<span class="text-accent">Streaming</span>
+        </a>
+
+        <div class="m-auto w-full max-w-sm py-12 motion-safe:animate-fade-up">
+          {{{ await $slots.main() }}}
+        </div>
       </div>
-
-      <aside class="auth__aside">
-        <div class="auth__aside-top">
-          @!themeToggle()
-        </div>
-
-        <p class="auth__quote">Auth, kept intentionally minimal so you can build it your way.</p>
-
-        <div>
-          <div class="pitch__t">Looking for production-ready auth?</div>
-          <p class="pitch__p">
-            Check out Feature packs, production-ready full-stack components from the creator of AdonisJS.
-          </p>
-          <a
-            class="il pitch__a"
-            href="https://plus.adonisjs.com/feature-packs"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Explore Feature packs →
-          </a>
-        </div>
+      {{-- Lateral --}}
+      <aside class="hidden flex-col justify-end border-l border-border bg-surface p-12 lg:flex">
+        <p class="type-caption text-accent">Anime Streaming</p>
+        <p class="mt-4 font-display text-6xl leading-none font-bold tracking-wide uppercase">
+          Seus animes favoritos.
+          <span class="text-accent">Em um só lugar.</span>
+        </p>
+        <p class="mt-6 max-w-md type-body text-muted">
+          Assista aos episódios, descubra novas séries e acompanhe tudo direto do navegador.
+        </p>
       </aside>
     </div>
     @include('partials/flash_alerts')

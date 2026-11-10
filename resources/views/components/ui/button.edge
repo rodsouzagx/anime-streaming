@@ -1,4 +1,5 @@
 @let(variant = $props.get('variant') ?? 'primary')
+@let(block = $props.get('block'))
 @let(size = $props.get('size') ?? 'md')
 @let(href = $props.get('href'))
 @let(type = $props.get('type') ?? 'button')
@@ -19,6 +20,7 @@
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
   variants[variant],
   sizes[size],
+  block ? 'w-full' : '',
 ].join(' '))
 @if(href)
   <a href="{{ href }}" class="{{ classes }}">{{{ await $slots.main() }}}</a>

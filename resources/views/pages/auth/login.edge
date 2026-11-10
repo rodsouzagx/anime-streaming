@@ -1,49 +1,30 @@
-@layouts.auth()
-  <h1 class="auth__title">Welcome back</h1>
-  <p class="auth__sub">Sign in to continue building.</p>
-  @form({
-    route: 'session.store',
-    method: 'POST',
-    class: 'auth__form',
-    'x-data': '{ submitting: false }',
-    'x-on:submit': 'submitting = true',
-  })
-    @field.root({ name: 'email' })
-      @!field.label({ text: 'Email' })
-      @!input.control({
-        type: 'email',
-        autocomplete: 'username',
-        placeholder: 'you@example.com',
-      })
-      @!field.error()
-    @end
-    @field.root({ name: 'password' })
-      @!field.label({ text: 'Password' })
-      @!input.control({
-        type: 'password',
-        autocomplete: 'current-password',
-        placeholder: '••••••••',
-      })
-      @!field.error()
-    @end
-    @!button({
-      text: 'Sign in',
-      type: 'submit',
-      block: true,
-      style: 'margin-top: 4px;',
-      'x-bind:disabled': 'submitting',
-      'x-text': "submitting ? 'One moment…' : 'Sign in'",
+@layouts.auth({ title: 'Entrar' })
+  <h1 class="type-h1">Entrar</h1>
+  <p class="mt-1 type-meta">Bem-vindo de volta. Entre para continuar assistindo.</p>
+  @form({ route: 'session.store', method: 'POST', class: 'mt-8 flex flex-col gap-5' })
+    @!ui.input({
+      name: 'email',
+      label: 'E-mail',
+      type: 'email',
+      autocomplete: 'username',
+      placeholder: 'voce@exemplo.com',
     })
+    @!ui.input({
+      name: 'password',
+      label: 'Senha',
+      type: 'password',
+      autocomplete: 'current-password',
+      placeholder: '••••••••',
+    })
+    <div class="mt-2">
+      @ui.button({ type: 'submit', size: 'lg', block: true })
+        Entrar
+      @end
+    </div>
   @end
 
-  <p class="auth__foot">
-    
-
-    New here?
-
-
-    @link({ route: 'new_account.create', class: 'il' })
-      Create an account
-    @end
+  <p class="mt-6 text-center type-meta">
+    Ainda não tem uma conta?
+    <a href="/signup" class="font-medium text-accent hover:underline">Criar conta</a>
   </p>
 @end
