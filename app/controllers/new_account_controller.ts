@@ -23,6 +23,6 @@ export default class NewAccountController {
     const user = await User.create({ fullName, email, password })
 
     await auth.use('web').login(user)
-    return response.redirect('/animes')
+    return response.redirect('/')
   }
 }

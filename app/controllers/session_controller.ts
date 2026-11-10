@@ -24,7 +24,7 @@ export default class SessionController {
       const user = await User.verifyCredentials(email, password)
       await auth.use('web').login(user)
 
-      return response.redirect(user.role === 'admin' ? '/admin' : '/animes')
+      return response.redirect(user.role === 'admin' ? '/admin' : '/')
     } catch (error) {
       if (error instanceof errors.E_INVALID_CREDENTIALS) {
         session.flash('error', 'E-mail ou senha incorretos.')
@@ -41,6 +41,6 @@ export default class SessionController {
    */
   async destroy({ auth, response }: HttpContext) {
     await auth.use('web').logout()
-    return response.redirect('/animes')
+    return response.redirect('/')
   }
 }
