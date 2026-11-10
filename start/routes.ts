@@ -11,7 +11,7 @@ import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
 
-router.on('/').redirectToPath('/animes').as('home')
+router.get('/', [controllers.Home, 'index']).as('home')
 
 // Catálogo público
 router.get('/animes', [controllers.Animes, 'index']).as('animes.index')

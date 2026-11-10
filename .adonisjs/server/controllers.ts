@@ -10,6 +10,7 @@ export const controllers = {
   AdminSeasons: () => import('#controllers/admin_seasons_controller'),
   AdminUsers: () => import('#controllers/admin_users_controller'),
   Animes: () => import('#controllers/animes_controller'),
+  Home: () => import('#controllers/home_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   Session: () => import('#controllers/session_controller'),
 }

@@ -13,6 +13,7 @@ const animeFields = {
   ageRating: vine.enum(['L', '10', '12', '14', '16', '18']).optional(),
   banner: vine.file(imageRules).optional(),
   genres: vine.array(vine.number().exists({ table: 'genres', column: 'id' })).optional(),
+  isFeatured: vine.boolean().optional(),
 }
 
 export const createAnimeValidator = vine.create({

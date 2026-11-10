@@ -1,0 +1,27 @@
+@let(title = $props.get('title'))
+@let(animes = $props.get('animes') ?? [])
+@let(href = $props.get('href'))
+
+<section class="mx-auto mt-12 max-w-7xl px-4 sm:px-6">
+  <div class="flex items-end justify-between gap-4">
+    <h2 class="type-h2">{{ title }}</h2>
+    @if(href)
+      <a
+        href="{{ href }}"
+        class="text-sm font-medium text-muted transition-colors duration-150 hover:text-accent"
+      >
+        Ver todos
+      </a>
+    @end
+  </div>
+
+  <div
+    class="-mx-4 mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:-mx-6 sm:px-6"
+  >
+    @each(anime in animes)
+      <div class="w-36 shrink-0 snap-start sm:w-44">
+        @!ui.animeCard({ anime })
+      </div>
+    @end
+  </div>
+</section>
