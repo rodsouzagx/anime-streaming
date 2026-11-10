@@ -25,6 +25,8 @@ export default class AnimesController {
       })
       .firstOrFail()
 
+    anime.genres.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
+
     return view.render('pages/animes/show', { anime })
   }
 
