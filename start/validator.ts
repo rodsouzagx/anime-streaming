@@ -12,6 +12,10 @@ vine.messagesProvider = new SimpleMessagesProvider(
     'database.unique': 'Já existe um registro com este {{ field }}',
     'file.size': 'O arquivo deve ter no máximo {{ size }}',
     'file.extname': 'Formato de arquivo inválido. Use: {{ extnames }}',
+    'email': 'Informe um e-mail válido',
+    'minLength': 'O campo {{ field }} deve ter no mínimo {{ min }} caracteres',
+    'confirmed': 'As senhas não conferem',
+    'sameAs': 'As senhas não conferem',
   },
   {
     title: 'título',
@@ -24,5 +28,9 @@ vine.messagesProvider = new SimpleMessagesProvider(
     banner: 'banner',
     number: 'número',
     video: 'vídeo',
+    fullName: 'nome',
+    email: 'e-mail',
+    password: 'senha',
+    passwordConfirmation: 'confirmação de senha',
   }
 )

@@ -6,6 +6,7 @@
 @let(hint = $props.get('hint'))
 @let(required = $props.get('required'))
 @let(accept = $props.get('accept'))
+@let(autocomplete = $props.get('autocomplete'))
 
 <div class="flex flex-col gap-1.5">
   @if(label)
@@ -21,8 +22,11 @@
     id="{{ name }}"
     name="{{ name }}"
     type="{{ type }}"
-    @if(type !== 'file')
+    @if(type !== 'file' && type !== 'password')
       value="{{ value }}"
+    @end
+    @if(autocomplete)
+      autocomplete="{{ autocomplete }}"
     @end
     placeholder="{{ placeholder }}"
     @if(accept)

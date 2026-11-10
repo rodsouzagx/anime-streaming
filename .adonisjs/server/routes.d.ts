@@ -12,7 +12,6 @@ export type ScannedRoutes = {
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
-    'dashboard': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'admin.episodes.index': { paramsTuple?: []; params?: {} }
     'admin.dashboard': { paramsTuple?: []; params?: {} }
@@ -35,7 +34,6 @@ export type ScannedRoutes = {
     'animes.watch': { paramsTuple: [ParamValue,ParamValue]; params: {'slug': ParamValue,'episodeId': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
-    'dashboard': { paramsTuple?: []; params?: {} }
     'admin.episodes.index': { paramsTuple?: []; params?: {} }
     'admin.dashboard': { paramsTuple?: []; params?: {} }
     'admin.users.index': { paramsTuple?: []; params?: {} }
@@ -51,7 +49,6 @@ export type ScannedRoutes = {
     'animes.watch': { paramsTuple: [ParamValue,ParamValue]; params: {'slug': ParamValue,'episodeId': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
-    'dashboard': { paramsTuple?: []; params?: {} }
     'admin.episodes.index': { paramsTuple?: []; params?: {} }
     'admin.dashboard': { paramsTuple?: []; params?: {} }
     'admin.users.index': { paramsTuple?: []; params?: {} }
