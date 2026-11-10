@@ -1,0 +1,33 @@
+@layouts.app({ title: `Editar ${anime.title}` })
+  @page({ title: 'Editar anime', description: anime.title })
+    <form
+      method="POST"
+      action="/admin/animes/{{ anime.id }}?_method=PUT"
+      enctype="multipart/form-data"
+      class="flex max-w-3xl flex-col gap-6 rounded-lg border border-border bg-surface/50 p-6"
+    >
+      {{ csrfField() }}
+      <div class="flex items-center gap-4">
+        <img
+          src="/{{ anime.coverPath }}"
+          alt=""
+          class="h-24 w-16 rounded-md object-cover ring-1 ring-border"
+        />
+        <div>
+          <p class="type-caption">Capa atual</p>
+          <p class="mt-1 type-meta">Para trocar, envie uma nova imagem no campo Capa, abaixo.</p>
+        </div>
+      </div>
+      @include('pages/admin/animes/_form')
+
+      <div class="flex justify-end gap-3 border-t border-border pt-6">
+        @ui.button({ href: `/admin/animes/${anime.id}`, variant: 'ghost' })
+          Cancelar
+        @end
+        @ui.button({ type: 'submit' })
+          Salvar alterações
+        @end
+      </div>
+    </form>
+  @end
+@end
