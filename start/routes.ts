@@ -45,6 +45,8 @@ router
     router.get('/animes/create', [controllers.AdminAnimes, 'create']).as('admin.animes.create')
     router.post('/animes', [controllers.AdminAnimes, 'store']).as('admin.animes.store')
     router.get('/animes/:id', [controllers.AdminAnimes, 'show']).as('admin.animes.show')
+    router.get('/animes/:id/edit', [controllers.AdminAnimes, 'edit']).as('admin.animes.edit')
+    router.put('/animes/:id', [controllers.AdminAnimes, 'update']).as('admin.animes.update')
     router.delete('/animes/:id', [controllers.AdminAnimes, 'destroy']).as('admin.animes.destroy')
 
     // Temporadas

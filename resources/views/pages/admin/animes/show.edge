@@ -8,6 +8,10 @@
         @svg('lucide:arrow-left', { width: 16, height: 16 })
         <span>Voltar</span>
       @end
+      @ui.button({ href: `/admin/animes/${anime.id}/edit`, variant: 'secondary' })
+        @svg('lucide:pencil', { width: 16, height: 16 })
+        <span>Editar</span>
+      @end
       @ui.button({ href: `/animes/${anime.slug}`, variant: 'secondary' })
         @svg('lucide:external-link', { width: 16, height: 16 })
         <span>Ver no site</span>

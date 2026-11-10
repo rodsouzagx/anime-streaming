@@ -1,10 +1,11 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import type { MultipartFile } from '@adonisjs/core/bodyparser'
 import app from '@adonisjs/core/services/app'
 import { randomUUID } from 'node:crypto'
 import string from '@adonisjs/core/helpers/string'
 import Anime from '#models/anime'
 import Genre from '#models/genre'
-import { createAnimeValidator } from '#validators/anime'
+import { createAnimeValidator, updateAnimeValidator } from '#validators/anime'
 
 export default class AdminAnimesController {
   async index({ view }: HttpContext) {
@@ -27,43 +28,82 @@ export default class AdminAnimesController {
   }
 
   async create({ view }: HttpContext) {
-    const genres = await Genre.all()
-    genres.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
+    const genres = await this.#allGenres()
 
     return view.render('pages/admin/animes/create', { genres })
   }
 
-  async store({ request, response }: HttpContext) {
+  async store({ request, response, session }: HttpContext) {
     const { cover, banner, genres, ...data } = await request.validateUsing(createAnimeValidator)
-
-    const coverName = `${randomUUID()}.${cover.extname}`
-    await cover.move(app.makePath('public/uploads/covers'), { name: coverName })
-
-    let bannerPath: string | null = null
-    if (banner) {
-      const bannerName = `${randomUUID()}.${banner.extname}`
-      await banner.move(app.makePath('public/uploads/banners'), { name: bannerName })
-      bannerPath = `uploads/banners/${bannerName}`
-    }
 
     const anime = await Anime.create({
       ...data,
       slug: string.slug(data.title, { lower: true }),
-      coverPath: `uploads/covers/${coverName}`,
-      bannerPath,
+      coverPath: await this.#storeImage(cover, 'covers'),
+      bannerPath: banner ? await this.#storeImage(banner, 'banners') : null,
     })
 
     if (genres?.length) {
       await anime.related('genres').attach(genres)
     }
 
-    return response.redirect('/admin/animes')
+    session.flash('success', `"${anime.title}" foi cadastrado.`)
+    return response.redirect(`/admin/animes/${anime.id}`)
   }
 
-  async destroy({ params, response }: HttpContext) {
+  async edit({ params, view }: HttpContext) {
+    const anime = await Anime.query().where('id', params.id).preload('genres').firstOrFail()
+    const genres = await this.#allGenres()
+    const selectedGenres = anime.genres.map((genre) => genre.id)
+
+    return view.render('pages/admin/animes/edit', { anime, genres, selectedGenres })
+  }
+
+  async update({ params, request, response, session }: HttpContext) {
+    const anime = await Anime.findOrFail(params.id)
+    const { cover, banner, genres, ...data } = await request.validateUsing(updateAnimeValidator, {
+      meta: { animeId: anime.id },
+    })
+
+    anime.merge({ ...data, slug: string.slug(data.title, { lower: true }) })
+
+    if (cover) {
+      anime.coverPath = await this.#storeImage(cover, 'covers')
+    }
+    if (banner) {
+      anime.bannerPath = await this.#storeImage(banner, 'banners')
+    }
+
+    await anime.save()
+    await anime.related('genres').sync(genres ?? [])
+
+    session.flash('success', 'As alterações foram salvas.')
+    return response.redirect(`/admin/animes/${anime.id}`)
+  }
+
+  async destroy({ params, response, session }: HttpContext) {
     const anime = await Anime.findOrFail(params.id)
     await anime.delete()
 
+    session.flash('success', `"${anime.title}" foi removido.`)
     return response.redirect('/admin/animes')
+  }
+
+  /**
+   * Todos os gêneros, em ordem alfabética (com as regras do português).
+   */
+  async #allGenres() {
+    const genres = await Genre.all()
+    return genres.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
+  }
+
+  /**
+   * Salva uma imagem enviada em public/uploads/<pasta> e devolve o caminho.
+   */
+  async #storeImage(file: MultipartFile, folder: string) {
+    const name = `${randomUUID()}.${file.extname}`
+    await file.move(app.makePath(`public/uploads/${folder}`), { name })
+
+    return `uploads/${folder}/${name}`
   }
 }

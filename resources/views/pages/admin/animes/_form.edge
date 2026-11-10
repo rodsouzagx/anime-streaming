@@ -1,0 +1,106 @@
+{{--
+  Campos do formulário de anime, usados no cadastro e na edição.
+  Espera: genres (todos os gêneros), e opcionalmente anime e selectedGenres.
+--}}
+@let(current = typeof anime !== 'undefined' ? anime : null)
+@let(checkedGenres = (
+  old('genres') ?? (typeof selectedGenres !== 'undefined' ? selectedGenres : [])
+).map(String))
+@!ui.input({
+  name: 'title',
+  label: 'Título',
+  required: true,
+  placeholder: 'Ex: Frieren',
+  value: old('title') ?? current?.title,
+})
+@!ui.textarea({
+  name: 'synopsis',
+  label: 'Sinopse',
+  required: true,
+  rows: 5,
+  value: old('synopsis') ?? current?.synopsis,
+})
+
+<div class="grid gap-6 sm:grid-cols-2">
+  @!ui.select({
+    name: 'status',
+    label: 'Status',
+    required: true,
+    value: old('status') ?? current?.status,
+    options: [
+      { value: 'ongoing', label: 'Em lançamento' },
+      { value: 'finished', label: 'Finalizado' },
+    ],
+  })
+  @!ui.select({
+    name: 'ageRating',
+    label: 'Classificação indicativa',
+    value: old('ageRating') ?? current?.ageRating,
+    options: [
+      { value: '', label: 'Não informada' },
+      { value: 'L', label: 'Livre' },
+      { value: '10', label: '10 anos' },
+      { value: '12', label: '12 anos' },
+      { value: '14', label: '14 anos' },
+      { value: '16', label: '16 anos' },
+      { value: '18', label: '18 anos' },
+    ],
+  })
+  @!ui.input({
+    name: 'releaseYear',
+    label: 'Ano de lançamento',
+    type: 'number',
+    placeholder: 'Ex: 2023',
+    value: old('releaseYear') ?? current?.releaseYear,
+  })
+  @!ui.input({
+    name: 'studio',
+    label: 'Estúdio',
+    placeholder: 'Ex: Madhouse',
+    value: old('studio') ?? current?.studio,
+  })
+</div>
+
+<fieldset class="flex flex-col gap-2">
+  <legend class="mb-1.5 text-sm font-medium text-foreground">Gêneros</legend>
+  <div class="flex flex-wrap gap-2">
+    @each(genre in genres)
+      <label class="cursor-pointer">
+        <input
+          type="checkbox"
+          name="genres[]"
+          value="{{ genre.id }}"
+          class="peer sr-only"
+          {{ checkedGenres.includes(String(genre.id)) ? 'checked' : '' }}
+        />
+        <span
+          class="inline-flex rounded-md border border-border px-3 py-1.5 text-sm text-muted transition-colors duration-150 select-none hover:text-foreground peer-checked:border-accent peer-checked:bg-accent/10 peer-checked:text-accent peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent"
+        >
+          {{ genre.name }}
+        </span>
+      </label>
+    @end
+  </div>
+</fieldset>
+
+<div class="grid gap-6 sm:grid-cols-2">
+  @!ui.input({
+    name: 'cover',
+    label: 'Capa',
+    type: 'file',
+    accept: 'image/*',
+    required: !current,
+    hint: current
+      ? 'Envie uma nova imagem apenas se quiser trocar a capa atual.'
+      : 'Formato pôster (vertical). jpg, png ou webp, até 5 MB.',
+  })
+  @!ui.input({
+    name: 'banner',
+    label: 'Banner',
+    type: 'file',
+    accept: 'image/*',
+    hint: current
+      ? 'Envie uma nova imagem apenas se quiser trocar o banner atual.'
+      : 'Opcional. Imagem larga, no formato 21:9 (ex: 2560 × 1080 pixels).',
+  })
+</div>
