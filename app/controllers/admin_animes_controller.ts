@@ -65,7 +65,11 @@ export default class AdminAnimesController {
       meta: { animeId: anime.id },
     })
 
-    anime.merge({ ...data, slug: string.slug(data.title, { lower: true }) })
+    anime.merge({
+      ...data,
+      slug: string.slug(data.title, { lower: true }),
+      isFeatured: data.isFeatured ?? false,
+    })
 
     if (cover) {
       anime.coverPath = await this.#storeImage(cover, 'covers')
