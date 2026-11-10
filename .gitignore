@@ -24,3 +24,6 @@ yarn-error.log
 
 # Platform specific
 .DS_Store
+
+# Uploads (capas, banners e vídeos enviados pelo painel)
+public/uploads
