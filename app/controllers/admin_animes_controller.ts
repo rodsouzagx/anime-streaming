@@ -3,6 +3,7 @@ import app from '@adonisjs/core/services/app'
 import { randomUUID } from 'node:crypto'
 import string from '@adonisjs/core/helpers/string'
 import Anime from '#models/anime'
+import Genre from '#models/genre'
 import { createAnimeValidator } from '#validators/anime'
 
 export default class AdminAnimesController {
@@ -26,11 +27,14 @@ export default class AdminAnimesController {
   }
 
   async create({ view }: HttpContext) {
-    return view.render('pages/admin/animes/create')
+    const genres = await Genre.all()
+    genres.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
+
+    return view.render('pages/admin/animes/create', { genres })
   }
 
   async store({ request, response }: HttpContext) {
-    const { cover, banner, ...data } = await request.validateUsing(createAnimeValidator)
+    const { cover, banner, genres, ...data } = await request.validateUsing(createAnimeValidator)
 
     const coverName = `${randomUUID()}.${cover.extname}`
     await cover.move(app.makePath('public/uploads/covers'), { name: coverName })
@@ -42,12 +46,16 @@ export default class AdminAnimesController {
       bannerPath = `uploads/banners/${bannerName}`
     }
 
-    await Anime.create({
+    const anime = await Anime.create({
       ...data,
       slug: string.slug(data.title, { lower: true }),
       coverPath: `uploads/covers/${coverName}`,
       bannerPath,
     })
+
+    if (genres?.length) {
+      await anime.related('genres').attach(genres)
+    }
 
     return response.redirect('/admin/animes')
   }
