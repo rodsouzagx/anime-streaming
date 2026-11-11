@@ -6,10 +6,37 @@
         <span>Cadastrar anime</span>
       @end
     @end
+
+    <form method="GET" action="/admin/animes" class="mb-6 flex max-w-lg items-start gap-2">
+      <div class="flex-1">
+        @!ui.input({
+          name: 'q',
+          type: 'search',
+          value: search,
+          placeholder: 'Buscar anime pelo nome...',
+        })
+      </div>
+      @ui.button({ type: 'submit', variant: 'secondary' })
+        @svg('lucide:search', { width: 16, height: 16 })
+        <span>Buscar</span>
+      @end
+    </form>
+    @if(search)
+      <p class="mb-6 type-meta">
+        {{ animes.length }}
+        resultado(s) para "<span class="text-foreground">{{ search }}</span>".
+        <a href="/admin/animes" class="ml-2 text-accent hover:underline">Limpar busca</a>
+      </p>
+    @end
     @if(animes.length === 0)
       <div class="rounded-lg border border-dashed border-border py-16 text-center">
-        <p class="type-h3">Nenhum anime cadastrado</p>
-        <p class="mt-1 type-meta">Comece cadastrando o primeiro anime da plataforma.</p>
+        @if(search)
+          <p class="type-h3">Nenhum anime encontrado</p>
+          <p class="mt-1 type-meta">Tente buscar por outro nome.</p>
+        @else
+          <p class="type-h3">Nenhum anime cadastrado</p>
+          <p class="mt-1 type-meta">Comece cadastrando o primeiro anime da plataforma.</p>
+        @end
       </div>
     @else
       <div class="overflow-x-auto rounded-lg border border-border">

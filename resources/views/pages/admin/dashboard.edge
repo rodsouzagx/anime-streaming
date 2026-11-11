@@ -2,10 +2,10 @@
   {
     label: 'Animes',
     value: stats.animes,
+    detail: `${stats.episodes} episódio(s)`,
     href: '/admin/animes',
     icon: 'lucide:clapperboard',
   },
-  { label: 'Episódios', value: stats.episodes, href: '/admin/episodes', icon: 'lucide:play' },
   { label: 'Usuários', value: stats.users, href: '/admin/users', icon: 'lucide:users' },
 ])
 @layouts.app({ title: 'Painel' })
@@ -17,7 +17,7 @@
       @end
     @end
 
-    <div class="grid gap-4 sm:grid-cols-3">
+    <div class="grid gap-4 sm:grid-cols-2">
       @each(card in cards)
         <a
           href="{{ card.href }}"
@@ -31,7 +31,12 @@
               class: 'text-muted transition-colors group-hover:text-accent',
             })
           </div>
-          <span class="font-display text-5xl font-bold">{{ card.value }}</span>
+          <div>
+            <span class="block font-display text-5xl font-bold">{{ card.value }}</span>
+            @if(card.detail)
+              <span class="type-meta">{{ card.detail }}</span>
+            @end
+          </div>
         </a>
       @end
     </div>

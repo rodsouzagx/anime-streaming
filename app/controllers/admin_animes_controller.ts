@@ -8,10 +8,16 @@ import Genre from '#models/genre'
 import { createAnimeValidator, updateAnimeValidator } from '#validators/anime'
 
 export default class AdminAnimesController {
-  async index({ view }: HttpContext) {
-    const animes = await Anime.query().orderBy('created_at', 'desc')
+  async index({ request, view }: HttpContext) {
+    const search = request.input('q', '').trim()
 
-    return view.render('pages/admin/animes/index', { animes })
+    const animes = await Anime.query()
+      .if(search, (query) => {
+        query.whereILike('title', `%${search}%`)
+      })
+      .orderBy('created_at', 'desc')
+
+    return view.render('pages/admin/animes/index', { animes, search })
   }
 
   async show({ params, view }: HttpContext) {
