@@ -6,7 +6,9 @@ import { createSeasonValidator } from '#validators/season'
 export default class AdminSeasonsController {
   async store({ params, request, response }: HttpContext) {
     const anime = await Anime.findOrFail(params.animeId)
-    const data = await request.validateUsing(createSeasonValidator)
+    const data = await request.validateUsing(createSeasonValidator, {
+      meta: { animeId: anime.id },
+    })
 
     await anime.related('seasons').create(data)
 

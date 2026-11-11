@@ -16,6 +16,7 @@ vine.messagesProvider = new SimpleMessagesProvider(
     'minLength': 'O campo {{ field }} deve ter no mínimo {{ min }} caracteres',
     'confirmed': 'As senhas não conferem',
     'sameAs': 'As senhas não conferem',
+    'number.database.unique': 'Esse número já está sendo usado',
   },
   {
     title: 'título',
