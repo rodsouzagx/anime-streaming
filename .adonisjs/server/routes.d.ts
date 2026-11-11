@@ -29,6 +29,8 @@ export type ScannedRoutes = {
     'admin.episodes.create': { paramsTuple: [ParamValue]; params: {'seasonId': ParamValue} }
     'admin.episodes.store': { paramsTuple: [ParamValue]; params: {'seasonId': ParamValue} }
     'admin.episodes.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.episodes.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.episodes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
@@ -45,6 +47,7 @@ export type ScannedRoutes = {
     'admin.animes.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.seasons.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.episodes.create': { paramsTuple: [ParamValue]; params: {'seasonId': ParamValue} }
+    'admin.episodes.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
@@ -61,6 +64,7 @@ export type ScannedRoutes = {
     'admin.animes.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.seasons.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.episodes.create': { paramsTuple: [ParamValue]; params: {'seasonId': ParamValue} }
+    'admin.episodes.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   POST: {
     'new_account.store': { paramsTuple?: []; params?: {} }
@@ -73,6 +77,7 @@ export type ScannedRoutes = {
   PUT: {
     'admin.animes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.seasons.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.episodes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   DELETE: {
     'admin.animes.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }

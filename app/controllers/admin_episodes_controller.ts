@@ -3,7 +3,7 @@ import app from '@adonisjs/core/services/app'
 import { randomUUID } from 'node:crypto'
 import Season from '#models/season'
 import Episode from '#models/episode'
-import { createEpisodeValidator } from '#validators/episode'
+import { createEpisodeValidator, updateEpisodeValidator } from '#validators/episode'
 
 export default class AdminEpisodesController {
   async create({ params, view }: HttpContext) {
@@ -32,6 +32,37 @@ export default class AdminEpisodesController {
 
     session.flash('success', `Episódio ${episode.number} adicionado.`)
     return response.redirect(`/admin/animes/${season.animeId}`)
+  }
+
+  async edit({ params, view }: HttpContext) {
+    const episode = await Episode.query()
+      .where('id', params.id)
+      .preload('season', (seasonQuery) => {
+        seasonQuery.preload('anime')
+      })
+      .firstOrFail()
+
+    return view.render('pages/admin/episodes/edit', { episode, season: episode.season })
+  }
+
+  async update({ params, request, response, session }: HttpContext) {
+    const episode = await Episode.query().where('id', params.id).preload('season').firstOrFail()
+    const { video, ...data } = await request.validateUsing(updateEpisodeValidator, {
+      meta: { seasonId: episode.seasonId, episodeId: episode.id },
+    })
+
+    episode.merge({ ...data, synopsis: data.synopsis ?? null })
+
+    if (video) {
+      const videoName = `${randomUUID()}.${video.extname}`
+      await video.move(app.makePath('public/uploads/videos'), { name: videoName })
+      episode.videoPath = `uploads/videos/${videoName}`
+    }
+
+    await episode.save()
+
+    session.flash('success', `Episódio ${episode.number} atualizado.`)
+    return response.redirect(`/admin/animes/${episode.season.animeId}`)
   }
 
   async destroy({ params, response, session }: HttpContext) {

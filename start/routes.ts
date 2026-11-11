@@ -56,6 +56,8 @@ router
     router
       .delete('/episodes/:id', [controllers.AdminEpisodes, 'destroy'])
       .as('admin.episodes.destroy')
+    router.get('/episodes/:id/edit', [controllers.AdminEpisodes, 'edit']).as('admin.episodes.edit')
+    router.put('/episodes/:id', [controllers.AdminEpisodes, 'update']).as('admin.episodes.update')
   })
   .prefix('/admin')
   .use([middleware.auth(), middleware.admin()])

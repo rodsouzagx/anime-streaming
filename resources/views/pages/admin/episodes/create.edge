@@ -10,30 +10,7 @@
       class="flex max-w-3xl flex-col gap-6 rounded-lg border border-border bg-surface/50 p-6"
     >
       {{ csrfField() }}
-      <div class="grid gap-6 sm:grid-cols-[120px_1fr]">
-        @!ui.input({
-          name: 'number',
-          label: 'Número',
-          type: 'number',
-          required: true,
-          value: season.episodes.length + 1,
-        })
-        @!ui.input({
-          name: 'title',
-          label: 'Título',
-          required: true,
-          placeholder: 'Ex: O fim da jornada',
-        })
-      </div>
-      @!ui.textarea({ name: 'synopsis', label: 'Sinopse', rows: 3, hint: 'Opcional.' })
-      @!ui.input({
-        name: 'video',
-        label: 'Vídeo',
-        type: 'file',
-        accept: 'video/mp4,video/webm',
-        required: true,
-        hint: 'mp4 ou webm, até 500 MB. O envio pode levar alguns segundos.',
-      })
+      @include('pages/admin/episodes/_form')
 
       <div class="flex justify-end gap-3 border-t border-border pt-6">
         @ui.button({ href: `/admin/animes/${season.animeId}`, variant: 'ghost' })

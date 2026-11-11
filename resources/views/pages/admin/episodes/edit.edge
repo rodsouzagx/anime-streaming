@@ -1,0 +1,25 @@
+@layouts.app({ title: `Editar episódio ${episode.number}` })
+  @page({
+    title: 'Editar episódio',
+    description: `${season.anime.title} · Temporada ${season.number}`,
+  })
+    <form
+      method="POST"
+      action="/admin/episodes/{{ episode.id }}?_method=PUT"
+      enctype="multipart/form-data"
+      class="flex max-w-3xl flex-col gap-6 rounded-lg border border-border bg-surface/50 p-6"
+    >
+      {{ csrfField() }}
+      @include('pages/admin/episodes/_form')
+
+      <div class="flex justify-end gap-3 border-t border-border pt-6">
+        @ui.button({ href: `/admin/animes/${season.animeId}`, variant: 'ghost' })
+          Cancelar
+        @end
+        @ui.button({ type: 'submit' })
+          Salvar alterações
+        @end
+      </div>
+    </form>
+  @end
+@end
