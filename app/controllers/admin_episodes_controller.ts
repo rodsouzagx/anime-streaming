@@ -16,16 +16,6 @@ export default class AdminEpisodesController {
     return view.render('pages/admin/episodes/create', { season })
   }
 
-  async index({ view }: HttpContext) {
-    const episodes = await Episode.query()
-      .preload('season', (seasonQuery) => {
-        seasonQuery.preload('anime')
-      })
-      .orderBy('created_at', 'desc')
-
-    return view.render('pages/admin/episodes/index', { episodes })
-  }
-
   async store({ params, request, response }: HttpContext) {
     const season = await Season.findOrFail(params.seasonId)
     const { video, ...data } = await request.validateUsing(createEpisodeValidator)
