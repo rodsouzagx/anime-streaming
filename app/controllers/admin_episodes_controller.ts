@@ -16,7 +16,7 @@ export default class AdminEpisodesController {
     return view.render('pages/admin/episodes/create', { season })
   }
 
-  async store({ params, request, response }: HttpContext) {
+  async store({ params, request, response, session }: HttpContext) {
     const season = await Season.findOrFail(params.seasonId)
     const { video, ...data } = await request.validateUsing(createEpisodeValidator, {
       meta: { seasonId: season.id },
@@ -25,19 +25,20 @@ export default class AdminEpisodesController {
     const videoName = `${randomUUID()}.${video.extname}`
     await video.move(app.makePath('public/uploads/videos'), { name: videoName })
 
-    await season.related('episodes').create({
+    const episode = await season.related('episodes').create({
       ...data,
       videoPath: `uploads/videos/${videoName}`,
     })
 
+    session.flash('success', `Episódio ${episode.number} adicionado.`)
     return response.redirect(`/admin/animes/${season.animeId}`)
   }
 
-  async destroy({ params, response }: HttpContext) {
-    const episode = await Episode.query().where('id', params.id).preload('season').firstOrFail()
-
+  async destroy({ params, response, session }: HttpContext) {
+    const episode = await Episode.findOrFail(params.id)
     await episode.delete()
 
+    session.flash('success', `"${episode.title}" foi removido.`)
     return response.redirect().back()
   }
 }
