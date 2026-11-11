@@ -9,18 +9,20 @@ export default class HomeController {
       .preload('genres')
       .orderBy('updated_at', 'desc')
       .limit(5)
+    featured.forEach((anime) => anime.genres.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR')))
 
     const recent = await Anime.query().orderBy('created_at', 'desc').limit(12)
 
     const genres = await Genre.query()
       .has('animes')
+      .withCount('animes')
       .preload('animes', (animesQuery) => {
         animesQuery.orderBy('title')
       })
     genres.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
 
-    featured.forEach((anime) => anime.genres.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR')))
+    const genreRows = genres.filter((genre) => genre.$extras.animes_count >= 2)
 
-    return view.render('pages/home', { featured, recent, genres })
+    return view.render('pages/home', { featured, recent, genres, genreRows })
   }
 }
