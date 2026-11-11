@@ -6,6 +6,7 @@ import Genre from '#models/genre'
 
 export default class Anime extends AnimeSchema {
   static table = 'animes'
+  static featuredSlots = 5
 
   @hasMany(() => Season)
   declare seasons: HasMany<typeof Season>

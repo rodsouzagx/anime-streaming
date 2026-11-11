@@ -61,26 +61,17 @@
   })
 </div>
 
-<label
-  class="flex cursor-pointer items-start gap-4 rounded-lg border border-border bg-surface p-4 transition-colors duration-150 hover:border-muted/40 has-checked:border-accent/50"
->
-  <input
-    type="checkbox"
-    name="isFeatured"
-    value="1"
-    class="peer sr-only"
-    {{ (old('isFeatured') ?? current?.isFeatured) ? 'checked' : '' }}
-  />
-  <span
-    class="relative mt-0.5 h-5 w-9 shrink-0 rounded-full bg-surface-2 transition-colors duration-150 peer-checked:bg-accent peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent after:absolute after:top-0.5 after:left-0.5 after:size-4 after:rounded-full after:bg-foreground after:transition-transform after:duration-150 after:ease-smooth peer-checked:after:translate-x-4"
-  ></span>
-  <span>
-    <span class="block text-sm font-medium text-foreground">Destaque na página inicial</span>
-    <span class="type-meta">
-      O anime aparece na seção principal da home. Fica melhor com um banner.
-    </span>
-  </span>
-</label>
+<div class="flex flex-col gap-1.5">
+  @!ui.select({
+    name: 'featuredPosition',
+    label: 'Destaque na página inicial',
+    value: old('featuredPosition') ?? current?.featuredPosition ?? '',
+    options: featuredOptions,
+  })
+  <p class="type-meta">
+    Os destaques aparecem no topo da home, nessa ordem. Ficam melhores com um banner.
+  </p>
+</div>
 
 <fieldset class="flex flex-col gap-2">
   <legend class="mb-1.5 text-sm font-medium text-foreground">Gêneros</legend>

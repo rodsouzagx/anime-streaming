@@ -17,7 +17,7 @@ export class AnimeGenreSchema extends BaseModel {
 }
 
 export class AnimeSchema extends BaseModel {
-  static $columns = ['ageRating', 'bannerPath', 'coverPath', 'createdAt', 'id', 'isFeatured', 'releaseYear', 'slug', 'status', 'studio', 'synopsis', 'title', 'updatedAt'] as const
+  static $columns = ['ageRating', 'bannerPath', 'coverPath', 'createdAt', 'featuredPosition', 'id', 'releaseYear', 'slug', 'status', 'studio', 'synopsis', 'title', 'updatedAt'] as const
   $columns = AnimeSchema.$columns
   @column()
   declare ageRating: string | null
@@ -27,10 +27,10 @@ export class AnimeSchema extends BaseModel {
   declare coverPath: string
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
+  @column()
+  declare featuredPosition: number | null
   @column({ isPrimary: true })
   declare id: number
-  @column()
-  declare isFeatured: boolean
   @column()
   declare releaseYear: number | null
   @column()

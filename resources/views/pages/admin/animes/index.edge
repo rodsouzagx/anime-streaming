@@ -1,5 +1,8 @@
 @layouts.app({ title: 'Animes' })
-  @page({ title: 'Animes', description: `${animes.length} anime(s) cadastrado(s).` })
+  @page({
+    title: 'Animes',
+    description: `${animes.length} ${animes.length === 1 ? 'anime cadastrado' : 'animes cadastrados'}.`,
+  })
     @slot('actions')
       @ui.button({ href: '/admin/animes/create' })
         @svg('lucide:plus', { width: 16, height: 16 })
@@ -7,7 +10,7 @@
       @end
     @end
 
-    <form method="GET" action="/admin/animes" class="mb-6 flex max-w-lg items-start gap-2">
+    <form method="GET" action="/admin/animes" class="mb-4 flex max-w-lg items-start gap-2">
       <div class="flex-1">
         @!ui.input({
           name: 'q',
@@ -21,10 +24,20 @@
         <span>Buscar</span>
       @end
     </form>
+
+    <p class="mb-6 flex items-center gap-2 type-meta">
+      @svg('lucide:star', { width: 14, height: 14, class: 'text-accent' })
+      {{ featuredCount }}
+       de
+      {{ featuredSlots }}
+       posições de destaque ocupadas.
+
+    </p>
     @if(search)
       <p class="mb-6 type-meta">
         {{ animes.length }}
-        resultado(s) para "<span class="text-foreground">{{ search }}</span>".
+        {{ animes.length === 1 ? 'resultado' : 'resultados' }}
+        para "<span class="text-foreground">{{ search }}</span>".
         <a href="/admin/animes" class="ml-2 text-accent hover:underline">Limpar busca</a>
       </p>
     @end
@@ -60,7 +73,19 @@
                       class="h-14 w-10 shrink-0 rounded object-cover"
                     />
                     <div class="min-w-0">
-                      <p class="truncate font-semibold">{{ anime.title }}</p>
+                      <div class="flex items-center gap-2">
+                        <p class="truncate font-semibold">{{ anime.title }}</p>
+                        @if(anime.featuredPosition)
+                          <span
+                            class="flex shrink-0 items-center gap-1 rounded-md bg-accent/10 px-1.5 py-0.5 text-xs font-medium text-accent"
+                          >
+                            @svg('lucide:star', { width: 12, height: 12 })
+                            
+                            Destaque
+                            {{ anime.featuredPosition }}
+                          </span>
+                        @end
+                      </div>
                       <a href="/animes/{{ anime.slug }}" class="type-meta hover:text-accent">
                         /animes/{{ anime.slug }}
                       </a>
