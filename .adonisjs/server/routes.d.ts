@@ -34,6 +34,10 @@ export type ScannedRoutes = {
     'admin.episodes.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.episodes.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.episodes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.featured.index': { paramsTuple?: []; params?: {} }
+    'admin.featured.store': { paramsTuple?: []; params?: {} }
+    'admin.featured.move': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.featured.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
@@ -53,6 +57,7 @@ export type ScannedRoutes = {
     'admin.seasons.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.episodes.create': { paramsTuple: [ParamValue]; params: {'seasonId': ParamValue} }
     'admin.episodes.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.featured.index': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
@@ -72,6 +77,7 @@ export type ScannedRoutes = {
     'admin.seasons.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.episodes.create': { paramsTuple: [ParamValue]; params: {'seasonId': ParamValue} }
     'admin.episodes.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.featured.index': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'new_account.store': { paramsTuple?: []; params?: {} }
@@ -80,6 +86,8 @@ export type ScannedRoutes = {
     'admin.animes.store': { paramsTuple?: []; params?: {} }
     'admin.seasons.store': { paramsTuple: [ParamValue]; params: {'animeId': ParamValue} }
     'admin.episodes.store': { paramsTuple: [ParamValue]; params: {'seasonId': ParamValue} }
+    'admin.featured.store': { paramsTuple?: []; params?: {} }
+    'admin.featured.move': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   PUT: {
     'profile.update': { paramsTuple?: []; params?: {} }
@@ -91,6 +99,7 @@ export type ScannedRoutes = {
     'admin.animes.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.seasons.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.episodes.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.featured.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {
