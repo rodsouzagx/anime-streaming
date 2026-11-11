@@ -27,11 +27,8 @@
 
     <p class="mb-6 flex items-center gap-2 type-meta">
       @svg('lucide:star', { width: 14, height: 14, class: 'text-accent' })
-      {{ featuredCount }}
-       de
-      {{ featuredSlots }}
-       posições de destaque ocupadas.
-
+      <span>{{ featuredCount }} de {{ featuredSlots }} posições de destaque ocupadas.</span>
+      <a href="/admin/featured" class="text-accent hover:underline">Gerenciar</a>
     </p>
     @if(search)
       <p class="mb-6 type-meta">
@@ -81,7 +78,9 @@
                           >
                             @svg('lucide:star', { width: 12, height: 12 })
                             
+
                             Destaque
+
                             {{ anime.featuredPosition }}
                           </span>
                         @end

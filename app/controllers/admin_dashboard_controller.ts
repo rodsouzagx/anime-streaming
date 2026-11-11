@@ -5,10 +5,11 @@ import User from '#models/user'
 
 export default class AdminDashboardController {
   async index({ view }: HttpContext) {
-    const [animesCount, episodesCount, usersCount] = await Promise.all([
+    const [animesCount, episodesCount, usersCount, featuredCount] = await Promise.all([
       Anime.query().count('* as total').first(),
       Episode.query().count('* as total').first(),
       User.query().count('* as total').first(),
+      Anime.query().whereNotNull('featured_position').count('* as total').first(),
     ])
 
     return view.render('pages/admin/dashboard', {
@@ -16,6 +17,7 @@ export default class AdminDashboardController {
         animes: Number(animesCount?.$extras.total ?? 0),
         episodes: Number(episodesCount?.$extras.total ?? 0),
         users: Number(usersCount?.$extras.total ?? 0),
+        featured: Number(featuredCount?.$extras.total ?? 0),
       },
     })
   }

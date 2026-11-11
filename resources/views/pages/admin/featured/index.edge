@@ -1,0 +1,106 @@
+@layouts.app({ title: 'Destaques' })
+  @page({
+    title: 'Destaques',
+    description: 'A ordem aqui é a ordem do carrossel da página inicial.',
+  })
+    @slot('actions')
+      @ui.button({ href: '/admin', variant: 'ghost' })
+        @svg('lucide:arrow-left', { width: 16, height: 16 })
+        <span>Voltar</span>
+      @end
+      @ui.button({ href: '/', variant: 'secondary' })
+        @svg('lucide:external-link', { width: 16, height: 16 })
+        <span>Ver na home</span>
+      @end
+    @end
+
+    <ol
+      class="flex max-w-3xl flex-col divide-y divide-border overflow-hidden rounded-lg border border-border"
+    >
+      @each(slot in slots)
+        <li class="flex items-center gap-4 px-4 py-3">
+          <span class="w-8 shrink-0 font-display text-2xl font-bold text-muted">
+            {{ slot.position }}
+          </span>
+          @if(slot.anime)
+            {{-- Posição ocupada --}}
+            <img
+              src="/{{ slot.anime.coverPath }}"
+              alt=""
+              class="h-14 w-10 shrink-0 rounded object-cover"
+            />
+            <p class="min-w-0 flex-1 truncate font-semibold">{{ slot.anime.title }}</p>
+
+            <div class="flex shrink-0 items-center gap-2">
+              @if(slot.position > 1)
+                <form method="POST" action="/admin/featured/{{ slot.anime.id }}/move">
+                  {{ csrfField() }}
+                  <input type="hidden" name="direction" value="up" />
+                  @ui.button({
+                    type: 'submit',
+                    variant: 'ghost',
+                    size: 'icon',
+                    label: 'Subir',
+                  })
+                    @svg('lucide:arrow-up', { width: 15, height: 15 })
+                  @end
+                </form>
+              @else
+                <span class="size-8"></span>
+              @end
+              @if(slot.position < slots.length)
+                <form method="POST" action="/admin/featured/{{ slot.anime.id }}/move">
+                  {{ csrfField() }}
+                  <input type="hidden" name="direction" value="down" />
+                  @ui.button({
+                    type: 'submit',
+                    variant: 'ghost',
+                    size: 'icon',
+                    label: 'Descer',
+                  })
+                    @svg('lucide:arrow-down', { width: 15, height: 15 })
+                  @end
+                </form>
+              @else
+                <span class="size-8"></span>
+              @end
+
+              <form
+                method="POST"
+                action="/admin/featured/{{ slot.anime.id }}?_method=DELETE"
+                onsubmit="return confirm('Tirar este anime dos destaques?')"
+              >
+                {{ csrfField() }}
+                @ui.button({
+                  type: 'submit',
+                  variant: 'danger',
+                  size: 'icon',
+                  label: 'Tirar dos destaques',
+                })
+                  @svg('lucide:x', { width: 15, height: 15 })
+                @end
+              </form>
+            </div>
+          @else
+            {{-- Posição livre --}}
+            <form
+              method="POST"
+              action="/admin/featured"
+              class="flex min-w-0 flex-1 items-center gap-3"
+            >
+              {{ csrfField() }}
+              <input type="hidden" name="position" value="{{ slot.position }}" />
+              <div class="min-w-0 flex-1">
+                @!ui.select({ name: 'animeId', options: candidateOptions })
+              </div>
+              @ui.button({ type: 'submit', variant: 'secondary', size: 'sm' })
+                @svg('lucide:plus', { width: 14, height: 14 })
+                <span>Adicionar</span>
+              @end
+            </form>
+          @end
+        </li>
+      @end
+    </ol>
+  @end
+@end

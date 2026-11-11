@@ -62,6 +62,14 @@ router
       .as('admin.episodes.destroy')
     router.get('/episodes/:id/edit', [controllers.AdminEpisodes, 'edit']).as('admin.episodes.edit')
     router.put('/episodes/:id', [controllers.AdminEpisodes, 'update']).as('admin.episodes.update')
+
+    // Destaques
+    router.get('/featured', [controllers.AdminFeatured, 'index']).as('admin.featured.index')
+    router.post('/featured', [controllers.AdminFeatured, 'store']).as('admin.featured.store')
+    router.post('/featured/:id/move', [controllers.AdminFeatured, 'move']).as('admin.featured.move')
+    router
+      .delete('/featured/:id', [controllers.AdminFeatured, 'destroy'])
+      .as('admin.featured.destroy')
   })
   .prefix('/admin')
   .use([middleware.auth(), middleware.admin()])
