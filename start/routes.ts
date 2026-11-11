@@ -18,10 +18,14 @@ router
     router.post('login', [controllers.Session, 'store'])
   })
   .use(middleware.guest())
-
 router
   .group(() => {
     router.post('logout', [controllers.Session, 'destroy'])
+
+    // Perfil
+    router.get('/profile', [controllers.Profile, 'show']).as('profile.show')
+    router.get('/profile/edit', [controllers.Profile, 'edit']).as('profile.edit')
+    router.put('/profile', [controllers.Profile, 'update']).as('profile.update')
   })
   .use(middleware.auth())
 

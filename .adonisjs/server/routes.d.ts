@@ -13,6 +13,9 @@ export type ScannedRoutes = {
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
+    'profile.show': { paramsTuple?: []; params?: {} }
+    'profile.edit': { paramsTuple?: []; params?: {} }
+    'profile.update': { paramsTuple?: []; params?: {} }
     'admin.dashboard': { paramsTuple?: []; params?: {} }
     'admin.users.index': { paramsTuple?: []; params?: {} }
     'admin.animes.index': { paramsTuple?: []; params?: {} }
@@ -39,6 +42,8 @@ export type ScannedRoutes = {
     'animes.watch': { paramsTuple: [ParamValue,ParamValue]; params: {'slug': ParamValue,'episodeId': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
+    'profile.show': { paramsTuple?: []; params?: {} }
+    'profile.edit': { paramsTuple?: []; params?: {} }
     'admin.dashboard': { paramsTuple?: []; params?: {} }
     'admin.users.index': { paramsTuple?: []; params?: {} }
     'admin.animes.index': { paramsTuple?: []; params?: {} }
@@ -56,6 +61,8 @@ export type ScannedRoutes = {
     'animes.watch': { paramsTuple: [ParamValue,ParamValue]; params: {'slug': ParamValue,'episodeId': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
+    'profile.show': { paramsTuple?: []; params?: {} }
+    'profile.edit': { paramsTuple?: []; params?: {} }
     'admin.dashboard': { paramsTuple?: []; params?: {} }
     'admin.users.index': { paramsTuple?: []; params?: {} }
     'admin.animes.index': { paramsTuple?: []; params?: {} }
@@ -75,6 +82,7 @@ export type ScannedRoutes = {
     'admin.episodes.store': { paramsTuple: [ParamValue]; params: {'seasonId': ParamValue} }
   }
   PUT: {
+    'profile.update': { paramsTuple?: []; params?: {} }
     'admin.animes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.seasons.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.episodes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }

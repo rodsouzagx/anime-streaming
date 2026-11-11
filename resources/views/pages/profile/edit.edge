@@ -1,0 +1,135 @@
+@layouts.app({ title: 'Editar perfil' })
+  @page({ title: 'Editar perfil', description: 'Atualize sua foto e seu nome.' })
+    <form
+      method="POST"
+      action="/profile?_method=PUT"
+      enctype="multipart/form-data"
+      x-data="{
+        hasPhoto: {{ user.avatarPath ? 'true' : 'false' }},
+        preview: null,
+        removed: false,
+        pick(event) {
+        const file = event.target.files[0]
+        if (!file) return
+        this.preview = URL.createObjectURL(file)
+        this.removed = false
+        },
+        clear() {
+        if (this.preview) {
+        this.preview = null
+        this.$refs.file.value = ''
+        return
+        }
+        this.removed = true
+        },
+        get showsPhoto() {
+        return this.preview || (this.hasPhoto && !this.removed)
+        },
+        }"
+      class="flex max-w-xl flex-col gap-6 rounded-lg border border-border bg-surface/50 p-6"
+    >
+      {{ csrfField() }}
+      {{-- Foto --}}
+      <div class="flex items-center gap-5">
+        <div class="relative shrink-0">
+          {{-- Foto atual (ou iniciais) --}}
+          <div x-show="!preview && !removed">
+            @!ui.avatar({ user, size: 'lg' })
+          </div>
+          {{-- Prévia da foto escolhida --}}
+          <img
+            x-show="preview"
+            x-cloak
+            :src="preview"
+            alt=""
+            class="size-28 rounded-full object-cover ring-1 ring-border"
+          />
+          {{-- Iniciais, quando a foto foi marcada para remover --}}
+          <span
+            x-show="removed && !preview"
+            x-cloak
+            class="grid size-28 place-items-center rounded-full bg-surface-2 text-3xl font-semibold text-muted ring-1 ring-border"
+          >
+            {{ user.initials }}
+          </span>
+          {{-- Botão de escolher foto --}}
+          <label
+            class="absolute right-0 bottom-0 grid size-9 cursor-pointer place-items-center rounded-full border-2 border-surface bg-accent text-accent-foreground transition-transform duration-150 ease-smooth hover:scale-110"
+            :title="showsPhoto ? 'Trocar foto' : 'Adicionar foto'"
+          >
+            <span x-show="showsPhoto">
+              @svg('lucide:pencil', { width: 16, height: 16 })
+            </span>
+            <span x-show="!showsPhoto">
+              @svg('lucide:camera', { width: 16, height: 16 })
+            </span>
+            <span class="sr-only" x-text="showsPhoto ? 'Trocar foto' : 'Adicionar foto'"></span>
+            <input
+              type="file"
+              name="avatar"
+              accept="image/*"
+              class="sr-only"
+              x-ref="file"
+              x-on:change="pick($event)"
+            />
+          </label>
+          {{-- Botão de remover --}}
+          {{-- Botão de desfazer ou remover --}}
+          <button
+            type="button"
+            x-show="showsPhoto"
+            x-on:click="clear()"
+            :aria-label="preview ? 'Desfazer' : 'Remover foto'"
+            :title="preview ? 'Desfazer' : 'Remover foto'"
+            class="absolute top-0 right-0 grid size-7 place-items-center rounded-full border-2 border-surface bg-surface-2 text-muted transition-colors duration-150 hover:text-red-400"
+          >
+            <span x-show="preview">
+              @svg('lucide:undo-2', { width: 14, height: 14 })
+            </span>
+            <span x-show="!preview">
+              @svg('lucide:x', { width: 14, height: 14 })
+            </span>
+          </button>
+
+          <input type="hidden" name="removeAvatar" :value="removed ? '1' : ''" />
+        </div>
+
+        <div class="min-w-0">
+          <p class="text-sm font-medium text-foreground">Foto do perfil</p>
+          <p class="type-meta">jpg, png ou webp, até 2 MB.</p>
+          <p x-show="preview || removed" x-cloak class="mt-1 text-sm font-medium text-accent">
+            Salve para aplicar a mudança na foto.
+          </p>
+          @inputError('avatar')
+            @each(message in $messages)
+              <p class="mt-1 text-sm text-red-400">{{ message }}</p>
+            @end
+          @end
+        </div>
+      </div>
+      {{-- Nome --}}
+      <div class="flex flex-col gap-6 border-t border-border pt-6">
+        @!ui.input({
+          name: 'fullName',
+          label: 'Nome',
+          required: true,
+          value: old('fullName') ?? user.fullName,
+        })
+
+        <div class="flex flex-col gap-1.5">
+          <p class="text-sm font-medium text-foreground">E-mail</p>
+          <p class="type-meta">{{ user.email }}</p>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 border-t border-border pt-6">
+        @ui.button({ href: '/profile', variant: 'ghost' })
+          Cancelar
+        @end
+        @ui.button({ type: 'submit' })
+          Salvar alterações
+        @end
+      </div>
+    </form>
+  @end
+@end
