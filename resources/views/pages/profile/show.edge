@@ -1,0 +1,29 @@
+@layouts.app({ title: 'Meu perfil' })
+  @page()
+    <section
+      class="flex flex-col gap-6 rounded-lg border border-border bg-surface p-6 sm:flex-row sm:items-center motion-safe:animate-fade-up"
+    >
+      @!ui.avatar({ user, size: 'lg' })
+
+      <div class="min-w-0 flex-1">
+        <div class="flex flex-wrap items-center gap-3">
+          <h1 class="truncate type-h1">{{ user.fullName ?? 'Sem nome' }}</h1>
+          @if(user.role === 'admin')
+            <span class="rounded-md bg-accent/10 px-2 py-1 text-xs font-medium text-accent">
+              Administrador
+            </span>
+          @end
+        </div>
+        <p class="mt-1 type-meta">{{ user.email }}</p>
+        <p class="mt-1 type-meta">
+          Membro desde
+          {{ user.createdAt.setLocale('pt-BR').toFormat("MMMM 'de' yyyy") }}
+        </p>
+      </div>
+      @ui.button({ href: '/profile/edit', variant: 'secondary' })
+        @svg('lucide:pencil', { width: 16, height: 16 })
+        <span>Editar perfil</span>
+      @end
+    </section>
+  @end
+@end
