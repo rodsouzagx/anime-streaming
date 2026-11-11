@@ -2,7 +2,6 @@ import type { HttpContext } from '@adonisjs/core/http'
 import type { MultipartFile } from '@adonisjs/core/bodyparser'
 import app from '@adonisjs/core/services/app'
 import { randomUUID } from 'node:crypto'
-import string from '@adonisjs/core/helpers/string'
 import Anime from '#models/anime'
 import Genre from '#models/genre'
 import { createAnimeValidator, updateAnimeValidator } from '#validators/anime'
@@ -55,7 +54,6 @@ export default class AdminAnimesController {
 
     const anime = await Anime.create({
       ...data,
-      slug: string.slug(data.title, { lower: true }),
       coverPath: await this.#storeImage(cover, 'covers'),
       bannerPath: banner ? await this.#storeImage(banner, 'banners') : null,
     })
@@ -81,10 +79,7 @@ export default class AdminAnimesController {
       meta: { animeId: anime.id },
     })
 
-    anime.merge({
-      ...data,
-      slug: string.slug(data.title, { lower: true }),
-    })
+    anime.merge(data)
 
     if (cover) {
       anime.coverPath = await this.#storeImage(cover, 'covers')
