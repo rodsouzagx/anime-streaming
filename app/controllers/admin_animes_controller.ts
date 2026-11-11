@@ -17,7 +17,14 @@ export default class AdminAnimesController {
       })
       .orderBy('created_at', 'desc')
 
-    return view.render('pages/admin/animes/index', { animes, search })
+    const featuredCount = (await Anime.query().whereNotNull('featured_position')).length
+
+    return view.render('pages/admin/animes/index', {
+      animes,
+      search,
+      featuredCount,
+      featuredSlots: Anime.featuredSlots,
+    })
   }
 
   async show({ params, view }: HttpContext) {
@@ -35,8 +42,9 @@ export default class AdminAnimesController {
 
   async create({ view }: HttpContext) {
     const genres = await this.#allGenres()
+    const featuredOptions = await this.#featuredOptions()
 
-    return view.render('pages/admin/animes/create', { genres })
+    return view.render('pages/admin/animes/create', { genres, featuredOptions })
   }
 
   async store({ request, response, session }: HttpContext) {
@@ -61,10 +69,15 @@ export default class AdminAnimesController {
     const anime = await Anime.query().where('id', params.id).preload('genres').firstOrFail()
     const genres = await this.#allGenres()
     const selectedGenres = anime.genres.map((genre) => genre.id)
+    const featuredOptions = await this.#featuredOptions(anime.id)
 
-    return view.render('pages/admin/animes/edit', { anime, genres, selectedGenres })
+    return view.render('pages/admin/animes/edit', {
+      anime,
+      genres,
+      selectedGenres,
+      featuredOptions,
+    })
   }
-
   async update({ params, request, response, session }: HttpContext) {
     const anime = await Anime.findOrFail(params.id)
     const { cover, banner, genres, ...data } = await request.validateUsing(updateAnimeValidator, {
@@ -74,7 +87,7 @@ export default class AdminAnimesController {
     anime.merge({
       ...data,
       slug: string.slug(data.title, { lower: true }),
-      isFeatured: data.isFeatured ?? false,
+      featuredPosition: data.featuredPosition ?? null,
     })
 
     if (cover) {
@@ -115,5 +128,33 @@ export default class AdminAnimesController {
     await file.move(app.makePath(`public/uploads/${folder}`), { name })
 
     return `uploads/${folder}/${name}`
+  }
+
+  /**
+   * As opções de posição de destaque, mostrando quais estão ocupadas e por quem.
+   * O anime sendo editado não conta como ocupando a própria posição.
+   */
+  async #featuredOptions(currentAnimeId?: number) {
+    const occupied = await Anime.query().whereNotNull('featured_position')
+
+    const options: { value: string | number; label: string; disabled?: boolean }[] = [
+      { value: '', label: 'Não destacar' },
+    ]
+
+    for (let position = 1; position <= Anime.featuredSlots; position++) {
+      const occupant = occupied.find(
+        (anime) => anime.featuredPosition === position && anime.id !== currentAnimeId
+      )
+
+      options.push({
+        value: position,
+        label: occupant
+          ? `Posição ${position} · ocupada por ${occupant.title}`
+          : `Posição ${position} · livre`,
+        disabled: Boolean(occupant),
+      })
+    }
+
+    return options
   }
 }

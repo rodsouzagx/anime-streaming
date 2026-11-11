@@ -5,10 +5,10 @@ import Genre from '#models/genre'
 export default class HomeController {
   async index({ view }: HttpContext) {
     const featured = await Anime.query()
-      .where('is_featured', true)
+      .whereNotNull('featured_position')
       .preload('genres')
-      .orderBy('updated_at', 'desc')
-      .limit(5)
+      .orderBy('featured_position')
+
     featured.forEach((anime) => anime.genres.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR')))
 
     const recent = await Anime.query().orderBy('created_at', 'desc').limit(12)

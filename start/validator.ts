@@ -17,6 +17,7 @@ vine.messagesProvider = new SimpleMessagesProvider(
     'confirmed': 'As senhas não conferem',
     'sameAs': 'As senhas não conferem',
     'number.database.unique': 'Esse número já está sendo usado',
+    'featuredPosition.database.unique': 'Essa posição já está ocupada por outro anime',
   },
   {
     title: 'título',
@@ -34,5 +35,6 @@ vine.messagesProvider = new SimpleMessagesProvider(
     password: 'senha',
     passwordConfirmation: 'confirmação de senha',
     avatar: 'foto',
+    featuredPosition: 'posição de destaque',
   }
 )

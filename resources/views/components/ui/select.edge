@@ -23,6 +23,7 @@
       <option
         value="{{ option.value }}"
         {{ String(option.value) === String(value) ? 'selected' : '' }}
+        {{ option.disabled ? 'disabled' : '' }}
       >
         {{ option.label }}
       </option>
