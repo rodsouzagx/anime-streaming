@@ -50,6 +50,14 @@
                   @svg('lucide:plus', { width: 14, height: 14 })
                   <span>Episódio</span>
                 @end
+                @ui.button({
+                  href: `/admin/seasons/${season.id}/edit`,
+                  variant: 'ghost',
+                  size: 'icon',
+                  label: 'Editar temporada',
+                })
+                  @svg('lucide:pencil', { width: 15, height: 15 })
+                @end
 
                 <form
                   method="POST"
@@ -57,8 +65,13 @@
                   onsubmit="return confirm('Remover esta temporada e todos os episódios dela?')"
                 >
                   {{ csrfField() }}
-                  @ui.button({ type: 'submit', variant: 'danger', size: 'sm' })
-                    Remover
+                  @ui.button({
+                    type: 'submit',
+                    variant: 'danger',
+                    size: 'icon',
+                    label: 'Remover temporada',
+                  })
+                    @svg('lucide:trash-2', { width: 15, height: 15 })
                   @end
                 </form>
               </div>
@@ -75,16 +88,32 @@
                       {{ episode.number }}
                     </span>
                     <p class="min-w-0 flex-1 truncate font-semibold">{{ episode.title }}</p>
-                    <form
-                      method="POST"
-                      action="/admin/episodes/{{ episode.id }}?_method=DELETE"
-                      onsubmit="return confirm('Remover este episódio?')"
-                    >
-                      {{ csrfField() }}
-                      @ui.button({ type: 'submit', variant: 'ghost', size: 'sm' })
-                        @svg('lucide:trash-2', { width: 15, height: 15 })
+                    <div class="flex items-center gap-2">
+                      @ui.button({
+                        href: `/admin/episodes/${episode.id}/edit`,
+                        variant: 'ghost',
+                        size: 'icon',
+                        label: 'Editar episódio',
+                      })
+                        @svg('lucide:pencil', { width: 15, height: 15 })
                       @end
-                    </form>
+
+                      <form
+                        method="POST"
+                        action="/admin/episodes/{{ episode.id }}?_method=DELETE"
+                        onsubmit="return confirm('Remover este episódio?')"
+                      >
+                        {{ csrfField() }}
+                        @ui.button({
+                          type: 'submit',
+                          variant: 'danger',
+                          size: 'icon',
+                          label: 'Remover episódio',
+                        })
+                          @svg('lucide:trash-2', { width: 15, height: 15 })
+                        @end
+                      </form>
+                    </div>
                   </li>
                 @end
               </ul>

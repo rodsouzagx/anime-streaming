@@ -1,0 +1,39 @@
+@layouts.app({ title: `Editar temporada ${season.number}` })
+  @page({
+    title: 'Editar temporada',
+    description: `${season.anime.title} · Temporada ${season.number}`,
+  })
+    <form
+      method="POST"
+      action="/admin/seasons/{{ season.id }}?_method=PUT"
+      class="flex max-w-xl flex-col gap-6 rounded-lg border border-border bg-surface/50 p-6"
+    >
+      {{ csrfField() }}
+      @!ui.input({
+        name: 'number',
+        label: 'Número',
+        type: 'number',
+        required: true,
+        value: old('number') ?? season.number,
+      })
+      @!ui.input({
+        name: 'title',
+        label: 'Título',
+        value: old('title') ?? season.title,
+        hint:
+          'Opcional. Deixe vazio para mostrar apenas "Temporada ' +
+          season.number +
+          '".',
+      })
+
+      <div class="flex justify-end gap-3 border-t border-border pt-6">
+        @ui.button({ href: `/admin/animes/${season.animeId}`, variant: 'ghost' })
+          Cancelar
+        @end
+        @ui.button({ type: 'submit' })
+          Salvar alterações
+        @end
+      </div>
+    </form>
+  @end
+@end

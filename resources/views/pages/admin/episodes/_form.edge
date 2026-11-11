@@ -1,0 +1,49 @@
+{{--
+  Campos do formulário de episódio, usados no cadastro e na edição.
+  Espera: season (com episodes, no cadastro), e opcionalmente episode.
+--}}
+@let(current = typeof episode !== 'undefined' ? episode : null)
+
+<div class="grid gap-6 sm:grid-cols-[120px_1fr]">
+  @!ui.input({
+    name: 'number',
+    label: 'Número',
+    type: 'number',
+    required: true,
+    value: old('number') ?? current?.number ?? season.episodes.length + 1,
+  })
+  @!ui.input({
+    name: 'title',
+    label: 'Título',
+    required: true,
+    placeholder: 'Ex: O fim da jornada',
+    value: old('title') ?? current?.title,
+  })
+</div>
+@!ui.textarea({
+  name: 'synopsis',
+  label: 'Sinopse',
+  rows: 3,
+  hint: 'Opcional.',
+  value: old('synopsis') ?? current?.synopsis,
+})
+@if(current)
+  <div class="flex flex-col gap-1.5">
+    <p class="text-sm font-medium text-foreground">Vídeo atual</p>
+    <video
+      src="/{{ current.videoPath }}"
+      controls
+      class="aspect-video w-full max-w-md rounded-md bg-black ring-1 ring-border"
+    ></video>
+  </div>
+@end
+@!ui.input({
+  name: 'video',
+  label: current ? 'Trocar vídeo' : 'Vídeo',
+  type: 'file',
+  accept: 'video/mp4,video/webm',
+  required: !current,
+  hint: current
+    ? 'Envie um novo vídeo apenas se quiser substituir o atual.'
+    : 'mp4 ou webm, até 500 MB. O envio pode levar alguns segundos.',
+})
