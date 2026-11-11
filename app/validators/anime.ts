@@ -22,20 +22,18 @@ export const createAnimeValidator = vine.create({
   ...animeFields,
 })
 
-export const updateAnimeValidator = vine.withMetaData<{ animeId: number }>().compile(
-  vine.object({
-    title: vine
-      .string()
-      .trim()
-      .maxLength(255)
-      .unique({
-        table: 'animes',
-        column: 'title',
-        filter: (db, _value, field) => {
-          db.whereNot('id', field.meta.animeId)
-        },
-      }),
-    cover: vine.file(imageRules).optional(),
-    ...animeFields,
-  })
-)
+export const updateAnimeValidator = vine.withMetaData<{ animeId: number }>().create({
+  title: vine
+    .string()
+    .trim()
+    .maxLength(255)
+    .unique({
+      table: 'animes',
+      column: 'title',
+      filter: (db, _value, field) => {
+        db.whereNot('id', field.meta.animeId)
+      },
+    }),
+  cover: vine.file(imageRules).optional(),
+  ...animeFields,
+})

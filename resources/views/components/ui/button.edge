@@ -1,5 +1,6 @@
 @let(variant = $props.get('variant') ?? 'primary')
 @let(block = $props.get('block'))
+@let(label = $props.get('label'))
 @let(size = $props.get('size') ?? 'md')
 @let(href = $props.get('href'))
 @let(type = $props.get('type') ?? 'button')
@@ -13,6 +14,7 @@
   sm: 'h-8 px-3 text-sm',
   md: 'h-10 px-4 text-sm',
   lg: 'h-12 px-6 text-base',
+  icon: 'size-8',
 })
 @let(classes = [
   'inline-flex items-center justify-center gap-2 rounded-md font-semibold whitespace-nowrap',
@@ -23,7 +25,19 @@
   block ? 'w-full' : '',
 ].join(' '))
 @if(href)
-  <a href="{{ href }}" class="{{ classes }}">{{{ await $slots.main() }}}</a>
+  <a
+    href="{{ href }}"
+    class="{{ classes }}"
+    {{{ label ? `aria-label="${label}" title="${label}"` : '' }}}
+  >
+    {{{ await $slots.main() }}}
+  </a>
 @else
-  <button type="{{ type }}" class="{{ classes }}">{{{ await $slots.main() }}}</button>
+  <button
+    type="{{ type }}"
+    class="{{ classes }}"
+    {{{ label ? `aria-label="${label}" title="${label}"` : '' }}}
+  >
+    {{{ await $slots.main() }}}
+  </button>
 @end

@@ -44,7 +44,8 @@ router
       .post('/animes/:animeId/seasons', [controllers.AdminSeasons, 'store'])
       .as('admin.seasons.store')
     router.delete('/seasons/:id', [controllers.AdminSeasons, 'destroy']).as('admin.seasons.destroy')
-
+    router.get('/seasons/:id/edit', [controllers.AdminSeasons, 'edit']).as('admin.seasons.edit')
+    router.put('/seasons/:id', [controllers.AdminSeasons, 'update']).as('admin.seasons.update')
     // Episódios
     router
       .get('/seasons/:seasonId/episodes/create', [controllers.AdminEpisodes, 'create'])

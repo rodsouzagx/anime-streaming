@@ -24,6 +24,8 @@ export type ScannedRoutes = {
     'admin.animes.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.seasons.store': { paramsTuple: [ParamValue]; params: {'animeId': ParamValue} }
     'admin.seasons.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.seasons.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.seasons.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.episodes.create': { paramsTuple: [ParamValue]; params: {'seasonId': ParamValue} }
     'admin.episodes.store': { paramsTuple: [ParamValue]; params: {'seasonId': ParamValue} }
     'admin.episodes.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -41,6 +43,7 @@ export type ScannedRoutes = {
     'admin.animes.create': { paramsTuple?: []; params?: {} }
     'admin.animes.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.animes.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.seasons.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.episodes.create': { paramsTuple: [ParamValue]; params: {'seasonId': ParamValue} }
   }
   HEAD: {
@@ -56,6 +59,7 @@ export type ScannedRoutes = {
     'admin.animes.create': { paramsTuple?: []; params?: {} }
     'admin.animes.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.animes.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.seasons.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.episodes.create': { paramsTuple: [ParamValue]; params: {'seasonId': ParamValue} }
   }
   POST: {
@@ -68,6 +72,7 @@ export type ScannedRoutes = {
   }
   PUT: {
     'admin.animes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.seasons.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   DELETE: {
     'admin.animes.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
