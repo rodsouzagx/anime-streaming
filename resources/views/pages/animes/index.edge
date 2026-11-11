@@ -1,6 +1,16 @@
-@layouts.app({ title: 'Catálogo' })
-  @page({ title: 'Catálogo', description: 'Todos os animes disponíveis na plataforma.' })
-    <form method="GET" action="/animes" class="mb-8 flex max-w-lg items-start gap-2">
+@layouts.app({ title: currentGenre ? currentGenre.name : 'Catálogo' })
+  @page({
+    title: currentGenre ? currentGenre.name : 'Catálogo',
+    description: currentGenre
+      ? `Animes do gênero ${currentGenre.name}.`
+      : 'Todos os animes disponíveis na plataforma.',
+  })
+    {{-- Busca --}}
+    <form method="GET" action="/animes" class="mb-4 flex max-w-lg items-start gap-2">
+      @if(currentGenre)
+        <input type="hidden" name="genre" value="{{ currentGenre.slug }}" />
+      @end
+
       <div class="flex-1">
         @!ui.input({
           name: 'q',
@@ -14,17 +24,48 @@
         <span>Buscar</span>
       @end
     </form>
+    {{-- Gêneros --}}
+    <nav class="mb-8 flex flex-wrap gap-2" aria-label="Filtrar por gênero">
+      <a
+        href="/animes{{ search ? '?q=' + encodeURIComponent(search) : '' }}"
+        class="rounded-md border px-3 py-1.5 text-sm transition-colors duration-150 {{
+          !currentGenre
+            ? 'border-accent bg-accent/10 text-accent'
+            : 'border-border text-muted hover:text-foreground'
+        }}"
+      >
+        Todos
+      </a>
+      @each(genre in genres)
+        <a
+          href="/animes?genre={{ genre.slug }}{{ search ? '&q=' + encodeURIComponent(search) : '' }}"
+          class="rounded-md border px-3 py-1.5 text-sm transition-colors duration-150 {{
+            currentGenre?.id === genre.id
+              ? 'border-accent bg-accent/10 text-accent'
+              : 'border-border text-muted hover:text-foreground'
+          }}"
+        >
+          {{ genre.name }}
+        </a>
+      @end
+    </nav>
     @if(search)
       <p class="mb-6 type-meta">
         {{ animes.length }}
-        resultado(s) para "<span class="text-foreground">{{ search }}</span>".
-        <a href="/animes" class="ml-2 text-accent hover:underline">Limpar busca</a>
+        {{ animes.length === 1 ? 'resultado' : 'resultados' }}
+        para "<span class="text-foreground">{{ search }}</span>".
+        <a
+          href="/animes{{ currentGenre ? '?genre=' + currentGenre.slug : '' }}"
+          class="ml-2 text-accent hover:underline"
+        >
+          Limpar busca
+        </a>
       </p>
     @end
     @if(animes.length === 0)
       <div class="rounded-lg border border-dashed border-border py-16 text-center">
         <p class="type-h3">Nenhum anime encontrado</p>
-        <p class="mt-1 type-meta">Tente buscar por outro nome.</p>
+        <p class="mt-1 type-meta">Tente buscar por outro nome ou escolher outro gênero.</p>
       </div>
     @end
 

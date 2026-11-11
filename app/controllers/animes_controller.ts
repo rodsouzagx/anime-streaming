@@ -1,17 +1,28 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Anime from '#models/anime'
+import Genre from '#models/genre'
 
 export default class AnimesController {
   async index({ request, view }: HttpContext) {
     const search = request.input('q', '').trim()
+    const genreSlug = request.input('genre', '')
+
+    const genres = await Genre.query().has('animes')
+    genres.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
+    const currentGenre = genres.find((genre) => genre.slug === genreSlug) ?? null
 
     const animes = await Anime.query()
       .if(search, (query) => {
         query.whereILike('title', `%${search}%`)
       })
+      .if(currentGenre, (query) => {
+        query.whereHas('genres', (genreQuery) => {
+          genreQuery.where('genres.id', currentGenre!.id)
+        })
+      })
       .orderBy('title')
 
-    return view.render('pages/animes/index', { animes, search })
+    return view.render('pages/animes/index', { animes, search, genres, currentGenre })
   }
 
   async show({ params, view }: HttpContext) {
