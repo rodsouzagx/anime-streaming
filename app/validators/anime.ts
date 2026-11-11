@@ -1,5 +1,4 @@
 import vine from '@vinejs/vine'
-import Anime from '#models/anime'
 
 const imageRules = { size: '5mb', extnames: ['jpg', 'jpeg', 'png', 'webp'] }
 
@@ -19,12 +18,6 @@ const animeFields = {
 export const createAnimeValidator = vine.create({
   title: vine.string().trim().maxLength(255).unique({ table: 'animes', column: 'title' }),
   cover: vine.file(imageRules),
-  featuredPosition: vine
-    .number()
-    .min(1)
-    .max(Anime.featuredSlots)
-    .unique({ table: 'animes', column: 'featured_position' })
-    .optional(),
   ...animeFields,
 })
 
@@ -41,17 +34,5 @@ export const updateAnimeValidator = vine.withMetaData<{ animeId: number }>().cre
       },
     }),
   cover: vine.file(imageRules).optional(),
-  featuredPosition: vine
-    .number()
-    .min(1)
-    .max(Anime.featuredSlots)
-    .unique({
-      table: 'animes',
-      column: 'featured_position',
-      filter: (db, _value, field) => {
-        db.whereNot('id', field.meta.animeId)
-      },
-    })
-    .optional(),
   ...animeFields,
 })
