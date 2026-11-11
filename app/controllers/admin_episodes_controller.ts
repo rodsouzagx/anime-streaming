@@ -18,7 +18,9 @@ export default class AdminEpisodesController {
 
   async store({ params, request, response }: HttpContext) {
     const season = await Season.findOrFail(params.seasonId)
-    const { video, ...data } = await request.validateUsing(createEpisodeValidator)
+    const { video, ...data } = await request.validateUsing(createEpisodeValidator, {
+      meta: { seasonId: season.id },
+    })
 
     const videoName = `${randomUUID()}.${video.extname}`
     await video.move(app.makePath('public/uploads/videos'), { name: videoName })
