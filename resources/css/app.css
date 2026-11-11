@@ -81,3 +81,12 @@
     cursor: pointer;
   }
 }
+
+/* Esconde a barra de rolagem, mantendo a rolagem funcionando */
+@utility scrollbar-none {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
