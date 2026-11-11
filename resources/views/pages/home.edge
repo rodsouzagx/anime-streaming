@@ -88,12 +88,40 @@
     </section>
   @end
   {{-- Fileiras --}}
-  @if(recent.length)
-    @!ui.animeRow({ title: 'Novidades', animes: recent, href: '/animes' })
-  @end
-  @each(genre in genres)
-    @!ui.animeRow({ title: genre.name, animes: genre.animes })
-  @end
-
-  <div class="h-16"></div>
+  <div class="mx-auto mt-4 max-w-7xl divide-y divide-border px-4 sm:px-6">
+    @if(recent.length)
+      @!ui.animeRow({ title: 'Novidades', animes: recent, href: '/animes' })
+    @end
+    @each(genre in genreRows)
+      @!ui.animeRow({
+        title: genre.name,
+        animes: genre.animes,
+        href: `/animes?genre=${genre.slug}`,
+      })
+    @end
+    {{-- Navegue por gênero --}}
+    @if(genres.length)
+      <section class="py-10">
+        <h2 class="type-h2">Navegue por gênero</h2>
+        <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          @each(genre in genres)
+            <a
+              href="/animes?genre={{ genre.slug }}"
+              class="group flex flex-col gap-1 rounded-lg border border-border bg-surface p-4 transition-colors duration-150 hover:border-accent/50"
+            >
+              <span
+                class="font-display text-lg font-bold tracking-wide uppercase transition-colors group-hover:text-accent"
+              >
+                {{ genre.name }}
+              </span>
+              <span class="type-meta">
+                {{ genre.$extras.animes_count }}
+                {{ Number(genre.$extras.animes_count) === 1 ? 'anime' : 'animes' }}
+              </span>
+            </a>
+          @end
+        </div>
+      </section>
+    @end
+  </div>
 @end

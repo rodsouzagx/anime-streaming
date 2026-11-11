@@ -13,7 +13,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('dumper')
   </head>
-  <body class="min-h-screen bg-background font-sans text-foreground antialiased">
+  <body class="flex min-h-screen flex-col bg-background font-sans text-foreground antialiased">
     <header class="border-b border-border bg-background">
       <div class="mx-auto flex h-16 max-w-7xl items-center gap-8 px-4 sm:px-6">
         <a href="/" class="font-display text-2xl font-bold tracking-wide uppercase">
@@ -67,7 +67,37 @@
       </div>
     </header>
 
-    <main>{{{ await $slots.main() }}}</main>
+    <main class="flex-1">{{{ await $slots.main() }}}</main>
+    <footer class="mt-16 border-t border-border">
+      <div
+        class="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-10 sm:flex-row sm:items-start sm:justify-between sm:px-6"
+      >
+        <div class="max-w-sm">
+          <a href="/" class="font-display text-xl font-bold tracking-wide uppercase">
+            Anime<span class="text-accent">Streaming</span>
+          </a>
+          <p class="mt-2 type-meta">
+            Plataforma de streaming de animes desenvolvida como projeto acadêmico na UFRRJ.
+          </p>
+        </div>
+
+        <nav class="flex gap-6 text-sm" aria-label="Rodapé">
+          <a href="/" class="text-muted transition-colors duration-150 hover:text-accent">Início</a>
+          <a href="/animes" class="text-muted transition-colors duration-150 hover:text-accent">
+            Catálogo
+          </a>
+          <a
+            href="https://github.com/rodsouzagx/anime-streaming"
+            target="_blank"
+            rel="noreferrer"
+            class="flex items-center gap-1.5 text-muted transition-colors duration-150 hover:text-accent"
+          >
+            @svg('lucide:github', { width: 15, height: 15 })
+            <span>GitHub</span>
+          </a>
+        </nav>
+      </div>
+    </footer>
     @include('partials/flash_alerts')
   </body>
 </html>
