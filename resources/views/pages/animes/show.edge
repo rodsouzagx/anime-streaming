@@ -87,10 +87,7 @@
       @end
       @each(season in anime.seasons)
         <div class="mt-6">
-          <h3 class="mb-3 type-caption">
-            Temporada
-            {{ season.number }}{{ season.title ? ': ' + season.title : '' }}
-          </h3>
+          <h3 class="mb-3 type-caption">{{ season.label }}</h3>
 
           <ul class="divide-y divide-border overflow-hidden rounded-lg border border-border">
             @each(episode in season.episodes)

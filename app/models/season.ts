@@ -10,4 +10,8 @@ export default class Season extends SeasonSchema {
 
   @hasMany(() => Episode)
   declare episodes: HasMany<typeof Episode>
+
+  get label() {
+    return this.title ? `Temporada ${this.number}: ${this.title}` : `Temporada ${this.number}`
+  }
 }

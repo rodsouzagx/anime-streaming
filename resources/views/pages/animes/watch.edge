@@ -21,12 +21,7 @@
               {{ anime.title }}
             </a>
             <h1 class="mt-1 type-h1">{{ episode.title }}</h1>
-            <p class="mt-1 type-meta">
-              Temporada
-              {{ season.number }}
-              · Episódio
-              {{ episode.number }}
-            </p>
+            <p class="mt-1 type-meta">{{ season.label }} · Episódio {{ episode.number }}</p>
           </div>
           @if(nextEpisode)
             @ui.button({
@@ -48,7 +43,7 @@
         <div class="flex max-h-[70vh] flex-col gap-4 overflow-y-auto">
           @each(item in anime.seasons)
             <div>
-              <p class="mb-2 type-caption">Temporada {{ item.number }}</p>
+              <p class="mb-2 type-caption">{{ item.label }}</p>
               <ul class="flex flex-col gap-1">
                 @each(ep in item.episodes)
                   <li>
